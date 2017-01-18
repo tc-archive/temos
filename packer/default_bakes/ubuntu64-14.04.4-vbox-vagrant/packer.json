@@ -1,0 +1,72 @@
+{
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "virtualbox_version_file": ".vbox_version",
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+      "guest_os_type": "Ubuntu_64",
+      "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.4-server-amd64.iso",
+      "iso_checksum_type": "md5",
+      "iso_checksum": "2ac1f3e0de626e54d05065d6f549fa3a",
+      "boot_wait": "4s",
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <wait>",
+        "debian-installer=en_GB auto locale=en_GB.UTF-8 kbd-chooser/method=us <wait>",
+        "hostname={{ .Name }} <wait>",
+        "fb=false debconf/frontend=noninteractive <wait>",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=English (UK) keyboard-configuration/variant=English (UK) - English (UK, Macintosh) console-setup/ask_detect=false <wait>",
+        "initrd=/install/initrd.gz -- <enter><wait>"
+      ],
+      "disk_size": 20000,
+      "format": "ovf", 
+      "headless": false,
+      "http_directory": "preseed-server",
+      "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'vagrant'|sudo -S sh 'shutdown.sh'",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "10000s",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "1024"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ]
+    }
+  ],
+  "post-processors": [
+    {
+    "type": "vagrant",
+    "keep_input_artifact": true
+    }
+  ],
+  "provisioners": [
+    {
+      "override": {
+        "virtualbox-iso": {
+          "execute_command": "echo 'vagrant' | sudo -S sh '{{ .Path }}'"
+        }
+      },
+      "scripts": [
+        "scripts/install-core-image-components.sh"
+      ],
+      "type": "shell"
+    },
+    {
+      "scripts": [
+        "scripts/install-custom-image-components.sh"
+      ],
+      "type": "shell"
+    }
+  ]
+}
+
