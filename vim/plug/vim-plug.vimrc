@@ -116,6 +116,9 @@ set shiftwidth=4
 "--- on pressing tab, insert 4 spaces
 set expandtab
 
+"--- paste options
+set pastetoggle=<F2>
+
 
 "== ui Look  and feel ==========================================================
 
