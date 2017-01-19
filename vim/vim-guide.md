@@ -1,16 +1,18 @@
-|===================================================================================================
-| *** Modes ***
+----------------------------------------------------------------------------------------------------
+##### Modes
 
+```
 1.  Change to normal mode           : <ctrl-c> or <esc> (normal mode) 
 
 2.  Change to insert mode           : i
 
 3.  Change to visual mode           : v
+```
 
+----------------------------------------------------------------------------------------------------
+##### Files, Buffers and Panes (Normal Mode)
 
-|===================================================================================================
-| *** Files, Buffers and Panes *** (Normal Mode)
-
+```
 1.  Open file                       : :e <filename>
 
 2.  Write file                      : w and w <filename>
@@ -28,11 +30,12 @@
 8.  List Buffers                    : :ls
 
 9.  Open Buffer                     : :b <buffer name> and :b <buffer number>
+```
 
+----------------------------------------------------------------------------------------------------
+#### Window Panes (Normal Mode)
 
-|===================================================================================================
-| *** Window Panes *** (Normal Mode)
-
+```
 1.  New window                      : <ctrl-W>n
 
 2.  Create vertical split pane      : :sv <filename>
@@ -44,10 +47,10 @@
 
 5.  Adjust window size              : <ctrl-w>+ (increase) and <ctrl-w>- (decrease)
                                     : <ctrl-w>_ (maximise) and <ctrl-w>= (equalize)
+```
 
-
-|===================================================================================================
-| *** Movement *** (Normal Mode)
+----------------------------------------------------------------------------------------------------
+# Movement (Normal Mode)
 
 1.  Cursor movement                 : h (left), j (down), k(up), and l (right)
 
@@ -74,19 +77,19 @@
 8.  Number powered movement         : 5w (forward 5 words), 3b (back 3 words)
 
 
+----------------------------------------------------------------------------------------------------
+##### Inserting (Normal Mode) => (Insert Mode)
 
-|===================================================================================================
-| *** Inserting *** (Normal Mode) => (Insert Mode)
-
+```
 1.  Insert text                     : i (at cursor) and I (at start of line).
 
 2.  Append text                     : a (after cursor) and A (at end of line).
 
 3.  Insert new line                 : O (open above cursor) and o (open below cursor).
+```
 
-
-|===================================================================================================
-| *** Changing *** (Normal Mode) 
+----------------------------------------------------------------------------------------------------
+##### Changing (Normal Mode) 
 
 1.  Change single character         : s
 
@@ -103,9 +106,10 @@
 7.  Changes inside parentheses      : ci
 
 
-|===================================================================================================
-| *** Deleting **** (Normal Mode)
+----------------------------------------------------------------------------------------------------
+##### Deleting (Normal Mode)
 
+```
 1.  Delete character                : x (delete at cursor position) and X (backspace delete)
 
 2.  Delete word                     : dw (delete to end of word) and bdw (delete word)
@@ -113,11 +117,12 @@
 3.  Delete block                    : d<motion> (delete text in direction of motion)
 
 4.  Delete a character              : x (delete at cursor position) and X (backspace delete)
+```
 
+----------------------------------------------------------------------------------------------------
+##### Cut and Paste (Normal Mode)
 
-|===================================================================================================
-| *** Cut and Paste *** (Normal Mode)
-
+```
 1.  Cut a word to buffer            : d, e.g. bdw (cursor must be inside word)
 
 2.  Cut a line to buffer            : dd
@@ -128,10 +133,13 @@
 
 5.  Paste buffer                    : P (paste before) and p (paste after)  
 
+6.  Toggle past mode                : :set paste, :set nopaste, :set pastetoggle
+```
 
-|===================================================================================================
-| *** Visual Blocks *** (Normal Mode)
+----------------------------------------------------------------------------------------------------
+##### Visual Blocks (Normal Mode)
 
+```
 1. Enter visual block stream mode   : v
 
 2. Enter visual block line mode     : V
@@ -145,11 +153,12 @@
 6. Change block indentation         : < (unindent) and > (indent).
 
 7. Reselect last visual block       : gv
+```
 
+----------------------------------------------------------------------------------------------------
+##### Commands (Normal Mode)
 
-|===================================================================================================
-| *** Commands *** (Normal Mode)
-
+```
 1.  Undo                            : u (undo via history) [NB: U corrects an entire line, but, doe not use history]
 
 2.  Redo                            : <ctrl-R> (redo via history)
@@ -157,11 +166,12 @@
 3.  Repeat last editing command     : . (repeat the last command)
 
 4.  Insert text repeatedly          : 3iSomeText<esc>
+```
 
+----------------------------------------------------------------------------------------------------
+##### Searching (Normal Mode)
 
-|===================================================================================================
-| *** Searching *** (Normal Mode)
-
+```
 1.  Find a character on line        : f (forward), F (backward), e.g. 3fx (5th occurance of x)
 
 2.  Find character under cursor     : ; (forward) and , (backward)
@@ -177,6 +187,6 @@
 7.  Jump to local sumbol definition : gd and <ctrl-0> (to return)
 
 8.  Jump to global sumbol definition: <ctrl-]> and <ctrl-T> (to return) [NB: requires tags file]
-
+```
 
 
