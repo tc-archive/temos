@@ -150,10 +150,23 @@ set splitbelow
 set splitright
 
 
-"== pane spliting config =====================================================
+"== tab config ===============================================================
 
-" --- format the specified json. requires python
-command FmtJson :%!python -m json.tool
+"--- previous tab
+nmap <silent> <F7> :tabp<CR>
+"--- next tab
+nmap <silent> <F8> :tabn<CR>
+
+
+"== code folding config ======================================================
+
+set foldmethod=indent
+set foldlevel=99
+
+let g:SimpylFold_docstring_preview=1
+
+"--- use space bar to toggle folding
+nnoremap <space> za
 
 
 "== key binding config =======================================================
@@ -172,15 +185,22 @@ nnoremap <silent> {Up-Mapping} :TmuxNavigateUp<cr>
 nnoremap <silent> {Right-Mapping} :TmuxNavigateRight<cr>
 nnoremap <silent> {Previous-Mapping} :TmuxNavigatePrevious<cr>
 
+
+"== user commands  ===========================================================
+
+" --- format the specified json. requires python
+command FmtJson :%!python -m json.tool
+
+
 "== nerdtree config ==========================================================
 
 nmap <silent> <F5> :NERDTreeToggle<CR>
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 
-"# map <Leader>n <plug>NERDTreeTabsToggle<CR>
-nmap <silent> <F6> :NERDTreeTabsToggle<CR>
+"# nmap <silent> <F5> :NERDTreeTabsToggle<CR>
 let g:nerdtree_tabs_open_on_gui__startup=1
 let g:nerdtree_tabs_open_on_console_startup=1
+
 
 "== autocomplete config =======================================================
 
@@ -189,17 +209,6 @@ let g:ycm_autoclose_preview_window_after_completion=1
 
 "--- map <space-g> to navigate to declaration
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
-
-"== code folding config =======================================================
-
-set foldmethod=indent
-set foldlevel=99
-
-let g:SimpylFold_docstring_preview=1
-
-"--- use space bar to toggle folding
-nnoremap <space> za
 
 
 "== syntastic config ==========================================================

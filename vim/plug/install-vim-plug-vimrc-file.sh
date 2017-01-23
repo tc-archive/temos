@@ -3,8 +3,6 @@
 # install plug vimrc file
 cp ./vim-plug.vimrc ~/.vimrc
 
-vim -c :PlugInstall
-
 # install vim plugins
 # vim +PlugUpdate +PlugUpgrade +PlugInstall +PlugClean +qa
 vim +PlugInstall +qall

@@ -33,7 +33,7 @@
 ```
 
 ----------------------------------------------------------------------------------------------------
-#### Window Panes (Normal Mode)
+#### Window Panes (Normal Mode - <ctrl-W>)
 
 ```
 1.  New window                      : <ctrl-W>n
@@ -47,6 +47,15 @@
 
 5.  Adjust window size              : <ctrl-w>+ (increase) and <ctrl-w>- (decrease)
                                     : <ctrl-w>_ (maximise) and <ctrl-w>= (equalize)
+```
+
+----------------------------------------------------------------------------------------------------
+#### Window Panes (Normal Mode)
+
+```
+1.  New tab                         : :tabe <filename>
+
+2.  Tab movement                    : :tabp (previous), :tabn (next)
 ```
 
 ----------------------------------------------------------------------------------------------------
