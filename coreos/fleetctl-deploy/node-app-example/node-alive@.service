@@ -1,0 +1,16 @@
+[Unit]
+Description=Node Alive Service
+Requires=docker.service
+After=docker.service
+
+[Service]
+TimeoutStartSec=0
+ExecStartPre=-/usr/bin/docker kill node-alive
+ExecStartPre=-/usr/bin/docker rm -f node-alive
+# ExecStartPre=/usr/bin/docker pull templecloud/node-alive:latest
+# ExecStart=/usr/bin/docker run --name node-alive -p 3000:3000 templecloud/node-alive:latest
+ExecStartPre=/usr/bin/docker pull localhost:5000/templecloud/node-alive:latest
+ExecStart=/usr/bin/docker run --name node-alive -p 3000:3000 localhost:5000/templecloud/node-alive:latest
+
+[X-Fleet]
+Conflicts=node-alive@*
