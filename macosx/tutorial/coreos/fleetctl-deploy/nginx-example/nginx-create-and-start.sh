@@ -2,7 +2,7 @@
 
 # start a local coreos vagrant cluster
 TEMOS_HOME=~/TemOS
-INSTALL_HOME=${TEMOS_HOME}/vagrant/coreos-vagrant-cluster
+INSTALL_HOME=${TEMOS_HOME}/macosx/provision/virtual/vagrant/coreos-fleet-vagrant-cluster
 source ${INSTALL_HOME}/coreos-vagrant-cluster-create.sh
 source ${INSTALL_HOME}/coreos-vagrant-cluster-start.sh
 
