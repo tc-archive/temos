@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# libraries
+# --- libraries ---
 brew install ffmpeg
 brew install gnupg gnupg2
 brew install libpng
@@ -8,7 +8,7 @@ brew install qt
 brew install wxmac
 brew install xz
 
-# development
+# --- development ---
 brew install autoconf
 brew install automake
 brew install bison
@@ -27,7 +27,7 @@ brew install nmap
 brew install wget
 brew install wireshark
 
-# languages
+# --- languages ---
 brew install elixir
 brew install erlang rebar
 brew install go
@@ -40,7 +40,7 @@ brew install python pillow numpy
 brew instal ruby
 brew install rust
 
-# databases
+# --- databases ---
 brew install 
 brew install mongodb
 brew install mysql
@@ -49,16 +49,19 @@ brew install redis
 brew install rethinkdb
 brew install riak
 
-# messaging
+# --- messaging ---
 brew install zeromq
 
-# baking
+# --- baking ---
 brew install packer
 
-# virtualisation
+# --- virtualisation ---
 brew install vagrant
 
-# cloud
+# --- containerisation ---
+brew install docker
+
+# --- cloud ---
 brew install awscli
 brew install etcdctl
 brew install fleetctl
