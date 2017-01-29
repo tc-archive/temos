@@ -13,9 +13,9 @@
 # pyspark-notebook
 # all-spark-notebook
 
-TEMOS_HOME=~/Temos
+source ${TEMOS_HOME}/macosx/init.sh
 
-STACK=scipy-notebook
+STACK=${1:-scipy-notebook}
 NAME=temos-${STACK}
 LOCALHOST_PORT=32768
 CONTAINER_PORT=8888
