@@ -1,1 +1,4 @@
 data/jenkins
+
+# vim swap files
+**/*.swp
