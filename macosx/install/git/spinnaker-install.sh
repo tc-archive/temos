@@ -46,17 +46,6 @@ DECK_REPO='{"url": "https://github.com/spinnaker", "name": "deck", "port": 9000,
 
 #---------------------------------------------------------------------------------------------------
 
-# SPINNAKER_REPOS=(
-#     ${FRONT50_REPO}
-#     ${ROSCO_REPO}
-#     ${IGOR_REPO}
-#     ${ECHO_REPO}
-#     ${ORCA_REPO} 
-#     ${CLOUDDRIVER_REPO} 
-#     ${GATE_REPO}
-#     ${DECK_REPO} 
-#     )
-
 spinnaker_repos=(
     "${FRONT50_REPO}"
     "${ROSCO_REPO}"
@@ -171,7 +160,7 @@ function stop_spinnaker() {
 # install_spinnaker
 # update_spinnaker
 # start_spinnaker
-# stop_spinnaker
+stop_spinnaker
 list_spinnaker_repos
 
 
