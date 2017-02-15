@@ -5,10 +5,14 @@ DEFAULT_FTP_PROXY=
 DEFAULT_RSYNC_PROXY=
 
 function proxy-enable() {
-  export HTTPS_PROXY=${DEFAULT_HTTP_PROXY}
-  export HTTP_PROXY=${DEFAULT_HTTP_PROXY}
-  export http_proxy=${DEFAULT_HTTP_PROXY}
-  export https_proxy=${DEFAULT_HTTP_PROXY}
+  local _proxy=${DEFAULT_HTTP_PROXY}
+  if [[ ! -z "$1" ]]; then 
+    _proxy=$1 
+  fi
+  export HTTPS_PROXY=${_proxy}
+  export HTTP_PROXY=${_proxy}
+  export http_proxy=${_proxy}
+  export https_proxy=${_proxy}
   export ftp_proxy=${DEFAULT_FTP_PROXY}
   export rsync_proxy=${DEFAULT_RSYNC_PROXY}
 }
@@ -22,6 +26,6 @@ function proxy-disable() {
   unset rsync_proxy
 }
 
-# alias proxy-enable="source ${TEMOS_HOME}/macosx/scripts/proxy-env-set.sh"
-# alias proxy-disable="source ${TEMOS_HOME}/macosx/scripts/proxy-env-unset.sh"
+alias proxy-enable="proxy-enable"
+alias proxy-disable="proxy-disable"
 alias proxy-list="env | grep proxy | sort"
