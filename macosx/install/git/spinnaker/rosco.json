@@ -1,0 +1,7 @@
+{
+  "url": "https://github.com/spinnaker",
+  "name": "rosco",
+  "port": 8087,
+  "run_cmd": "./gradlew bootRun > rosco.log",
+  "health_endpoint": "http://localhost:8080/health"
+}

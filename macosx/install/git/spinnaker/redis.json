@@ -1,0 +1,7 @@
+{
+  "url": "https://github.com/antirez/redis",
+  "name": "redis",
+  "port": 8080,
+  "run_cmd": "docker run -p 6379:6379 --name spinnaker-redis -d redis",
+  "health_endpoint": ""
+}

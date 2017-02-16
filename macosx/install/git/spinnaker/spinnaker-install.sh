@@ -7,34 +7,41 @@
 SPINNAKER_INSTALL_PATH=~/spinnaker-dev
 
 # docker run -p 6379:6379 --name spinnaker-redis -d redis
+REDIS_CFG="redis.json"
+FRONT50_REPO=`cat ${REDIS_CFG} | jq '.'`
 
 # Front50 - Interface to persistent storage, such as Amazon S3 or Google Cloud Storage.
 #
-FRONT50_REPO='{"url": "https://github.com/spinnaker", "name": "front50", "port": 8080, "run_cmd": "./gradlew bootRun > front50.log"}'
+#FRONT50_REPO='{"url": "https://github.com/spinnaker", "name": "front50", "port": 8080, "run_cmd": "./gradlew bootRun > front50.log"}'
+FRONT50_CFG="front50.json"
+FRONT50_REPO=`cat ${FRONT50_CFG} | jq '.'`
 
-# Rosco - Machine image bakery. A machine image is a static view of the state and disk of a machine 
+# Rosco - Machine image bakery. A machine image is a static view of the state and disk of a machine
 # that can be 'deployed' into a running instance. Representation varies by cloud provider.
 
-ROSCO_REPO='{"url": "https://github.com/spinnaker", "name": "rosco", "port": 8087, "run_cmd": "./gradlew bootRun > rosco.log"}'
+ROSCO_CFG="rosco.json"
+ROSCO_REPO=`cat ${ROSCO_CFG} | jq '.'`
 
-# Igor - Interface to Jenkins. Can both listen to and fire Jenkins jobs and collect contextual 
+# Igor - Interface to Jenkins. Can both listen to and fire Jenkins jobs and collect contextual
 # job and build information.
 #
 IGOR_REPO='{"url": "https://github.com/spinnaker", "name": "igor", "port": 8088, "run_cmd": "./gradlew bootRun > igor.log"}'
 
-# Echo - Event bus for notifications and triggers. Triggers are things like git commits, Jenkins 
-# jobs finishing and other Spinnaker pipelines finishing. Notifications can send emails, slack 
+# Echo - Event bus for notifications and triggers. Triggers are things like git commits, Jenkins
+# jobs finishing and other Spinnaker pipelines finishing. Notifications can send emails, slack
 # notifications, SMS messages, etc.
 #
 ECHO_REPO='{"url": "https://github.com/spinnaker", "name": "echo", "port": 8089, "run_cmd": "./gradlew bootRun > echo.log"}'
 
 # Orca - Orchestration of pipelines and ad hoc operations.
 #
-ORCA_REPO='{"url": "https://github.com/spinnaker", "name": "orca", "port": 8083, "run_cmd": "./gradlew bootRun > orca.log"}'
+ORCA_CFG="orca.json"
+ORCA_REPO=$(cat ${ORCA_CFG} | jq '.')
 
 # Clouddriver -Interacts with and mutates infrastructure on underlying cloud providers.
 #
-CLOUDDRIVER_REPO='{"url": "https://github.com/spinnaker", "name": "clouddriver", "port": 7002, "run_cmd": "./gradlew bootRun > clouddriver.log"}'
+CLOUDDRIVER_REPO='clouddriver.json'
+ORCA_REPO=$(cat ${CLOUDDRIVER_CFG} | jq '.')
 
 # Gate - Api gateway. All external requests to Spinnaker are directed through Gate.
 #
@@ -46,16 +53,24 @@ DECK_REPO='{"url": "https://github.com/spinnaker", "name": "deck", "port": 9000,
 
 #---------------------------------------------------------------------------------------------------
 
+#spinnaker_repos=(
+#    "${FRONT50_REPO}"
+#    "${ROSCO_REPO}"
+#    "${IGOR_REPO}"
+#    "${ECHO_REPO}"
+#    "${ORCA_REPO}"
+#    "${CLOUDDRIVER_REPO}"
+#    "${GATE_REPO}"
+#    "${DECK_REPO}"
+#    )
+
 spinnaker_repos=(
     "${FRONT50_REPO}"
     "${ROSCO_REPO}"
-    "${IGOR_REPO}"
-    "${ECHO_REPO}"
     "${ORCA_REPO}"
-    "${CLOUDDRIVER_REPO}" 
-    "${GATE_REPO}"
-    "${DECK_REPO}"
+    "${CLOUDDRIVER_REPO}"
     )
+
 
 #---------------------------------------------------------------------------------------------------
 
@@ -117,7 +132,7 @@ function update_spinnaker() {
 
 function uninstall_spinnaker() {
     if [[ ! -d  ${SPINNAKER_INSTALL_PATH} ]]; then
-        printf "uninstalling spinnaker: '${SPINNAKER_INSTALL_PATH}'\n" 
+        printf "uninstalling spinnaker: '${SPINNAKER_INSTALL_PATH}'\n"
         rm -Rf ${SPINNAKER_INSTALL_PATH}
     fi
 }
@@ -128,13 +143,17 @@ function start_spinnaker() {
     do
         local repo_name=`echo ${repo} | jq -r '.name'`
         local run_cmd=`echo ${repo} | jq -r '.run_cmd'`
+        local health_endpoint=`echo ${repo} | jq -r '.health_endpoint'`
         pushd ${SPINNAKER_INSTALL_PATH}/${repo_name} > /dev/null
         printf "killing tmux session: '%s'...\n" ${repo_name}
         tmux kill-session -t ${repo_name}
         printf "starting tmux session '%s'...\n" ${repo_name}
         new_session_cmd="tmux new -d -s ${repo_name} '${run_cmd}'"
         eval "${new_session_cmd}"
-        # tmux detach
+        until $(curl --output /dev/null --silent --head --fail ${health_endpoint}); do
+          printf '.'
+          sleep 5
+        done
         popd > /dev/null
     done
     printf "=== tmux sessions ===\n"
@@ -159,8 +178,9 @@ function stop_spinnaker() {
 
 # install_spinnaker
 # update_spinnaker
-# start_spinnaker
-stop_spinnaker
+start_spinnaker
+# stop_spinnaker
 list_spinnaker_repos
 
 
+alias list_spinnaker_repos="list_spinnaker_repos"

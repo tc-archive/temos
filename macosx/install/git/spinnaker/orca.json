@@ -1,0 +1,7 @@
+{
+  "url": "https://github.com/spinnaker",
+  "name": "orca",
+  "port": 8083,
+  "run_cmd": "./gradlew bootRun > orca.log",
+  "health_endpoint": "http://localhost:8083/health"
+}

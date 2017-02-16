@@ -1,0 +1,7 @@
+{
+  "url": "https://github.com/spinnaker",
+  "name": "clouddriver",
+  "port": 7002,
+  "run_cmd": "./gradlew bootRun > clouddriver.log",
+  "health_endpoint": "http://localhost:7002/health"
+}

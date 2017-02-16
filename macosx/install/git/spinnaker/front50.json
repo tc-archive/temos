@@ -1,0 +1,7 @@
+{
+  "url": "https://github.com/spinnaker",
+  "name": "front50",
+  "port": 8080,
+  "run_cmd": "./gradlew bootRun > front50.log",
+  "health_endpoint": "http://localhost:8080/health"
+}
