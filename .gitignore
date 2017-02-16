@@ -1,4 +1,7 @@
 data/jenkins
 
+# bin directory
+/bin
+
 # vim swap files
 **/*.swp
