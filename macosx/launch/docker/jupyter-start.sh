@@ -41,9 +41,10 @@ URL=`docker exec -it ${NAME} jupyter notebook list \
 echo "server url      : ${URL}" && curl ${URL}
 echo "local data mount: ${LOCALHOST_MOUNT}"
 
-alias temos-ipython="docker exec -it ${NAME} ipython"
-
 # TODO check for OS type
 echo "open browser at : ${URL}" 
 open ${URL}
+
+alias temos-ipython="docker exec -it ${NAME} ipython"
+alias temos-jupyter="open ${URL}"
 
