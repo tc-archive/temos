@@ -77,6 +77,31 @@ function temos__wait_on_url() {
     fi
 }
 
+
+#---------------------------------------------------------------------------------------------------
+# Function to execute a command ($1) to retrieve a non empty value. Will attempt to execute the 
+# comman multiple times ($2) and will wait the specified ammount of time ($3) between each 
+# invocation.
+#
+function temos__wait_on_non_empty_result() {
+    local _cmd=$1
+    local _num_attempts=${2-60}
+    local _interval=${3-1}
+    if [[ ! -z "${_cmd}" ]]; then
+        for i in seq ${_num_attempts}; do
+            local _result=`${_cmd}`
+            if [[ ! -z "${_result}" ]]; then
+                printf '.'
+                sleep "${_interval}"
+            else
+                printf '\n'
+                break
+            fi
+        done
+    fi
+    echo "${_result}"
+}
+
 #---------------------------------------------------------------------------------------------------
 # set_temos_home
 # echo "system ostype  : ${OSTYPE}" 
