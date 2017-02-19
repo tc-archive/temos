@@ -45,6 +45,19 @@ function temos__docker_container_running() {
     echo "${_has_container_name}"
 }
 
+#---------------------------------------------------------------------------------------------------
+# Function that will wait for the specified container to reacher a 'RUNNING' state.
+# TODO: Add a timeout!
+#
+function temos__docker_container_waitfor() {
+    local _container_name=$1
+    if [[ ! -z "${_container_name}" ]]; then
+        until [ "`docker inspect -f {{.State.Running}} ${_container_name}`" == "true" ]; do
+            sleep 0.1;
+        done
+    fi
+}
+
 # docker machine
 #
 # alias docker-init-default='eval "$(docker-machine env default)"'
