@@ -1,12 +1,9 @@
 #!/bin/bash
 
 # *** WEB SERVERS *********************************************************************************
-#
-
 startWebServer() {
     SERVER_TYPE=$1
     PORT=$2
-
     # default port
     if [[ -z $PORT ]]; then
         PORT=8080
@@ -21,5 +18,5 @@ startWebServer() {
         echo 'Usage: webserver [python|node] [PORT]'
     fi
 }
-
 alias ws='startWebServer'
+
