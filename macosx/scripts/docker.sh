@@ -10,7 +10,7 @@ alias temos-docker-moby='screen ~/Library/Containers/com.docker.docker/Data/com.
 # Delete all exited docker containers. Optionally, pass in a grep expression to target 
 # specific containers. e.g. 'clean-exited-containers temos', 'clean-exited-containers temos'.
 #
-function temos::docker_container_clean_exited() {
+function temos__docker_container_clean_exited() {
     local _targets=$@
     local _cmd="docker ps --filter \"status=exited\" | awk 'NR>1 {print \$1}'"
     if [[ ! -z "${_targets}" ]]; then
@@ -21,12 +21,12 @@ function temos::docker_container_clean_exited() {
         echo "${_to_delete}" | xargs docker rm
     fi
 }
-alias docker-container-clean="temos::docker_container_clean_exited"
+alias docker-container-clean="temos__docker_container_clean_exited"
 
 #---------------------------------------------------------------------------------------------------
 # Function to return the name of the docker container if it exists; else nothing.
 #
-function temos::docker_container_exists() {
+function temos__docker_container_exists() {
     local _container_name=$1
     if [[ ! -z "${_container_name}" ]]; then
         local _has_container_name=$(docker ps -a | awk 'NR>1 {print $NF}' | grep "${_container_name}")
@@ -37,7 +37,7 @@ function temos::docker_container_exists() {
 #---------------------------------------------------------------------------------------------------
 # Function to return the name of the RUNNING docker container if it exists; else nothing.
 #
-function temos::docker_container_running() {
+function temos__docker_container_running() {
     local _container_name=$1
     if [[ ! -z "${_container_name}" ]]; then
         local _has_container_name=$(docker ps | awk 'NR>1 {print $NF}' | grep "${_container_name}")
