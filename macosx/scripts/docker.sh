@@ -10,7 +10,7 @@ alias temos-docker-moby='screen ~/Library/Containers/com.docker.docker/Data/com.
 # Delete all exited docker containers. Optionally, pass in a grep expression to target 
 # specific containers. e.g. 'clean-exited-containers temos', 'clean-exited-containers temos'.
 #
-function temos::docker-containers-clean-exited() {
+function temos::docker-container-clean-exited() {
     local _targets=$@
     local _cmd="docker ps --filter \"status=exited\" | awk 'NR>1 {print \$1}'"
     if [[ ! -z "${_targets}" ]]; then
@@ -40,7 +40,7 @@ function temos::docker-container-exists() {
 function temos::docker-container-running() {
     local _container_name=$1
     if [[ ! -z "${_container_name}" ]]; then
-        local _has_container_name=$(docker ps -a | awk 'NR>1 {print $NF}' | grep "${_container_name}")
+        local _has_container_name=$(docker ps | awk 'NR>1 {print $NF}' | grep "${_container_name}")
     fi
     echo "${_has_container_name}"
 }
