@@ -17,7 +17,7 @@
 # see: http://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
 # see: http://www.linuxjournal.com/content/return-values-bash-functions
 #
-function get_this_script_dir_path() {
+function temos__this_script_dir_path() {
     # NB: the callee should never pass in a result name of '__temos_callee-result_var'
 	local __temos_callee_result_var=$1
     local _source="${BASH_SOURCE[0]}"
@@ -39,7 +39,7 @@ function get_this_script_dir_path() {
 #---------------------------------------------------------------------------------------------------
 # Function to return the full directory path of the bash script it is invoked from.
 #
-function set_temos_home() {
+function temos__set_temos_home() {
     _TEMOS_HOME=$(dirname $(get_this_script_dir_path))
     if [[ -z "${TEMOS_HOME}" ]]; then
         export TEMOS_HOME=${_TEMOS_HOME}
@@ -54,7 +54,7 @@ function set_temos_home() {
 #---------------------------------------------------------------------------------------------------
 # Function to return the name of the alias if it exists; else nothing.
 #
-has_alias() {
+function temos__has_alias() {
 	local _alias_name=$1
     _has_alias_name=alias | grep ${_alias_name} \
         | awk -F' ' '{print $2}' | awk -F'=' '{print $1}' | sed "s/ //g"
@@ -62,7 +62,22 @@ has_alias() {
 }
 
 #---------------------------------------------------------------------------------------------------
+# Function to poll the specified url endpoint and wait for it to be available
+# TODO: add a timeout!!!
+#
+function temos__wait_on_url() {
+    local _url=$1
+    echo "waiting on _url: ${_url}"
+    if [[ ! -z "${_url}" ]]; then
+        echo "curl --output /dev/null --silent --head --fail ${_url}"
+        until $(curl --output /dev/null --silent --head --fail "${_url}"); do
+            printf '.'
+            sleep 5
+        done
+    fi
+}
 
+#---------------------------------------------------------------------------------------------------
 # set_temos_home
 # echo "system ostype  : ${OSTYPE}" 
 # echo "system uname   : `uname`"
