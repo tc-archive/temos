@@ -17,7 +17,7 @@
 # see: http://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
 # see: http://www.linuxjournal.com/content/return-values-bash-functions
 #
-function temos__this_script_dir_path() {
+function _temos_this_script_dir_path() {
     # NB: the callee should never pass in a result name of '__temos_callee-result_var'
 	local __temos_callee_result_var=$1
     local _source="${BASH_SOURCE[0]}"
@@ -39,7 +39,7 @@ function temos__this_script_dir_path() {
 #---------------------------------------------------------------------------------------------------
 # Function to return the full directory path of the bash script it is invoked from.
 #
-function temos__set_temos_home() {
+function _temos_set_temos_home() {
     _TEMOS_HOME=$(dirname $(get_this_script_dir_path))
     if [[ -z "${TEMOS_HOME}" ]]; then
         export TEMOS_HOME=${_TEMOS_HOME}
@@ -54,7 +54,7 @@ function temos__set_temos_home() {
 #---------------------------------------------------------------------------------------------------
 # Function to return the name of the alias if it exists; else nothing.
 #
-function temos__has_alias() {
+function _temos_has_alias() {
 	local _alias_name=$1
     _has_alias_name=alias | grep ${_alias_name} \
         | awk -F' ' '{print $2}' | awk -F'=' '{print $1}' | sed "s/ //g"
@@ -65,7 +65,7 @@ function temos__has_alias() {
 # Function to poll the specified url endpoint and wait for it to be available
 # TODO: add a timeout!!!
 #
-function temos__wait_on_url() {
+function _temos_wait_on_url() {
     local _url=$1
     echo "waiting on _url: ${_url}"
     if [[ ! -z "${_url}" ]]; then
@@ -77,29 +77,28 @@ function temos__wait_on_url() {
     fi
 }
 
-
 #---------------------------------------------------------------------------------------------------
 # Function to execute a command ($1) to retrieve a non empty value. Will attempt to execute the 
 # comman multiple times ($2) and will wait the specified ammount of time ($3) between each 
 # invocation.
 #
-function temos__wait_on_non_empty_result() {
-    local _cmd=$1
-    local _num_attempts=${2-60}
-    local _interval=${3-1}
-    if [[ ! -z "${_cmd}" ]]; then
-        for i in seq ${_num_attempts}; do
-            local _result=`${_cmd}`
-            if [[ ! -z "${_result}" ]]; then
+function _temos_wait_on_non_empty_result() {
+    local cmd=$1
+    local num_attempts=${2-60}
+    local interval=${3-1}
+    if [[ ! -z "${cmd}" ]]; then
+        for i in seq ${num_attempts}; do
+            local result=`${cmd}`
+            if [[ ! -z "${result}" ]]; then
                 printf '.'
-                sleep "${_interval}"
+                sleep "${interval}"
             else
                 printf '\n'
                 break
             fi
         done
     fi
-    echo "${_result}"
+    echo "${result}"
 }
 
 #---------------------------------------------------------------------------------------------------

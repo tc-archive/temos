@@ -10,15 +10,15 @@ alias temos-docker-moby='screen ~/Library/Containers/com.docker.docker/Data/com.
 # Delete all exited docker containers. Optionally, pass in a grep expression to target 
 # specific containers. e.g. 'clean-exited-containers temos', 'clean-exited-containers temos'.
 #
-function temos__docker_container_clean_exited() {
-    local _targets=$@
-    local _cmd="docker ps --filter \"status=exited\" | awk 'NR>1 {print \$1}'"
+function _temos_docker_container_clean_exited() {
+    local targets=$@
+    local cmd="docker ps --filter \"status=exited\" | awk 'NR>1 {print \$1}'"
     if [[ ! -z "${_targets}" ]]; then
-        _cmd="docker ps --filter \"status=exited\" | grep '${_targets}' | awk '{print \$1}'"
+        cmd="docker ps --filter \"status=exited\" | grep '${targets}' | awk '{print \$1}'"
     fi
-    local _to_delete=$(eval ${_cmd})
-    if [[ ! -z "${_to_delete}" ]]; then
-        echo "${_to_delete}" | xargs docker rm
+    local to_delete=$(eval ${cmd})
+    if [[ ! -z "${to_delete}" ]]; then
+        echo "${to_delete}" | xargs docker rm
     fi
 }
 alias docker-container-clean="temos__docker_container_clean_exited"
@@ -26,33 +26,33 @@ alias docker-container-clean="temos__docker_container_clean_exited"
 #---------------------------------------------------------------------------------------------------
 # Function to return the name of the docker container if it exists; else nothing.
 #
-function temos__docker_container_exists() {
-    local _container_name=$1
-    if [[ ! -z "${_container_name}" ]]; then
-        local _has_container_name=$(docker ps -a | awk 'NR>1 {print $NF}' | grep "${_container_name}")
+function _temos_docker_container_exists() {
+    local container_name=$1
+    if [[ ! -z "${container_name}" ]]; then
+        local has_container_name=$(docker ps -a | awk 'NR>1 {print $NF}' | grep "${container_name}")
     fi
-    echo "${_has_container_name}"
+    echo "${has_container_name}"
 }
 
 #---------------------------------------------------------------------------------------------------
 # Function to return the name of the RUNNING docker container if it exists; else nothing.
 #
-function temos__docker_container_running() {
-    local _container_name=$1
-    if [[ ! -z "${_container_name}" ]]; then
-        local _has_container_name=$(docker ps | awk 'NR>1 {print $NF}' | grep "${_container_name}")
+function _temos_docker_container_running() {
+    local container_name=$1
+    if [[ ! -z "${container_name}" ]]; then
+        local has_container_name=$(docker ps | awk 'NR>1 {print $NF}' | grep "${container_name}")
     fi
-    echo "${_has_container_name}"
+    echo "${has_container_name}"
 }
 
 #---------------------------------------------------------------------------------------------------
 # Function that will wait for the specified container to reacher a 'RUNNING' state.
 # TODO: Add a timeout!
 #
-function temos__docker_container_waitfor() {
-    local _container_name=$1
-    if [[ ! -z "${_container_name}" ]]; then
-        until [ "`docker inspect -f {{.State.Running}} ${_container_name}`" == "true" ]; do
+function _temos_docker_container_waitfor() {
+    local container_name=$1
+    if [[ ! -z "${container_name}" ]]; then
+        until [ "`docker inspect -f {{.State.Running}} ${container_name}`" == "true" ]; do
             sleep 0.1;
         done
     fi
