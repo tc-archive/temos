@@ -5,7 +5,9 @@ import ssl
 import oraclebmc
 from oraclebmc.config import validate_config
 from oraclebmc.core.models import AttachVolumeDetails
+from oraclebmc.core.models import CreateSubnetDetails
 from oraclebmc.core.models import CreateVolumeDetails
+from oraclebmc.core.models import CreateVcnDetails
 from oraclebmc.core.models import LaunchInstanceDetails
 from oraclebmc.identity.models import CreateUserDetails
 
@@ -38,10 +40,67 @@ def list_users(config, compartment_ocid):
 def init_network(config):
     return oraclebmc.core.virtual_network_client.VirtualNetworkClient(config)
 
+# def list_vcns(config, compartment_ocid):
+#     identity = init_network(config)
+#     response = identity.list_vcns(compartment_id=compartment_ocid)
+#     vcns = response.data
+#     print("num vcns: {}".format(len(vcns)))
+#     for idx, vcn in enumerate(vcns):
+#         print("vcn[{}] : {}".format(idx, vcn))
+#     return vcns
+#
+# VCN_CIDR_BLOCK="192.168.0.0/28"
+# def create_vcn(config, compartment_ocid):
+#     network = init_network(config)
+#     request = CreateVcnDetails()
+#     request.compartment_id = compartment_ocid
+#     request.cidr_block = VCN_CIDR_BLOCK
+#     request.display_name = "trjl-test-vcn"
+#     request.description = "Created with the Python SDK"
+#     response = network.create_vcn(request)
+#     vcn = response.data
+#     print("create vcn: {}".format(volume))
+#     return vcn
+#
+# def delete_vcn(config, vcn_ocid):
+#     network = init_network(config)
+#     response = network.delete_vcn(vcn_ocid)
+#     print("deleting vcn: {}".format(vcn_ocid))
+#     return response.data
 
-def create_vcn(config):
-    return None
+def list_subnets(config, compartment_ocid, vcn_ocid):
+    identity = init_network(config)
+    response = identity.list_subnets(compartment_id=compartment_ocid, vcn_id=vcn_ocid)
+    subnets = response.data
+    print("num subnets: {}".format(len(subnets)))
+    for idx, subnet in enumerate(subnets):
+        print("subnet[{}] : {}".format(idx, subnet))
+    return subnets
 
+SUBNET_CIDR_BLOCK=VCN_CIDR_BLOCK
+SUBNET_AVAILABILITY_DOMAIN=="NWuj:PHX-AD-3"
+def create_subnet(config, compartment_ocid, vcn_ocid):
+    network = init_network(config)
+    request = CreateSubnetDetails()
+    request.compartment_id = compartment_ocid
+    request.availability_domain = SUBNET_AVAILABILITY_DOMAIN
+    request.vcn_id = vcn_ocid
+    request.cidr_block = SUBNET_CIDR_BLOCK
+    # dhcp_options_id =
+    # route_table_id =
+    # security_list_ids =
+    request.display_name = "trjl-test-vcn"
+    request.description = "Created with the Python SDK"
+    response = network.create_subnet(request)
+    subnet = response.data
+    print("create subnet: {}".format(volume))
+    return vcn
+
+def delete_subnet(config, subnet_ocid):
+    network = init_network(config)
+    response = network.delete_subnet(subnet_ocid)
+    print("deleting subnet: {}".format(subnet_ocid))
+    return response.data
 
 #---------------------------------------------------------------------------------------------------
 # storage functions
@@ -97,7 +156,7 @@ def list_instances(config, compartment_ocid):
 
 UBUNTU_IMAGE_OCID="ocid1.image.oc1.phx.aaaaaaaaxsufrpzn72dvhry5swbuwnuldcn3eko3cx6g7z4tw4qfwkq2zkra"
 SHAPE_VS1="VM.Standard1.1"
-DOMAIN_3="NWuj:PHX-AD-3"
+DOMAIN_3=SUBNET_AVAILABILITY_DOMAIN
 SUBNET="ocid1.subnet.oc1.phx.aaaaaaaalyd5je5flygivxi66aem23jqsbeu7fwru3vod7fxlthutjidnh7a"
 def launch_instance(config, compartment_ocid):
     compute = init_compute(config)
@@ -159,19 +218,27 @@ if __name__ == "__main__":
     CONFIG = init_config()
     print("Config: {}".format(CONFIG))
     print("Config tenancy compartment id: {}".format(CONFIG["tenancy"]))
-    # get_configured_user(CONFIG)
-    # list_users(CONFIG)
 
-    # instance_ocid = launch_instance(CONFIG).id
-    instance_ocid = "ocid1.instance.oc1.phx.abyhqljrzih7t6psauzroi2bshosfgvjfrixjljlmctyepjrxt3mqymam3ga"
+    get_configured_user(CONFIG)
+    list_users(CONFIG, CONFIG["tenancy"])
+
+    vcn_ocid = "ocid1.vcn.oc1.phx.aaaaaaaa3rrt52uro46gfyaztporjjmj5rcvgmubuw6bdsxenjekchmlmxha"
+    # vcn_ocid = create_vcn(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID).id
+    # delete_vcn(CONFIG, vcn_ocid)
+    list_vcns(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
+
+    list_subnetsCONFIG, BRISTOL_CLOUD_COMPARTMENT_ID, vcn_ocid)
+
+    # instance_ocid = "ocid1.instance.oc1.phx.abyhqljrzih7t6psauzroi2bshosfgvjfrixjljlmctyepjrxt3mqymam3ga"
+    # instance_ocid = launch_instance(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID).id
     # terminate_instance(CONFIG, instance_ocid)
     list_instances(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
 
-    # volume_ocid = create_volume(CONFIG).id
-    volume_ocid = "ocid1.volume.oc1.phx.abyhqljrr4t77t2q4f5x4hqgbeg6ooewvpuzunazxqrk426aedlhd2zmungq"
+    # volume_ocid = "ocid1.volume.oc1.phx.abyhqljrr4t77t2q4f5x4hqgbeg6ooewvpuzunazxqrk426aedlhd2zmungq"
+    # volume_ocid = create_volume(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID).id
     # delete_volume(CONFIG, volume_ocid)
     list_volumes(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
 
+    # volume_attachment_id = "ocid1.volumeattachment.oc1.phx.abyhqljrexbeinbndxnltcd3l5awk2rsrl7eodre2u62o6rw6ja7edilznzq"
     # volume_attachment_id = attach_volume(CONFIG, instance_ocid, volume_ocid).id
-    volume_attachment_id = "ocid1.volumeattachment.oc1.phx.abyhqljrexbeinbndxnltcd3l5awk2rsrl7eodre2u62o6rw6ja7edilznzq"
-    get_volume_attachment(CONFIG, volume_attachment_id)
+    # get_volume_attachment(CONFIG, volume_attachment_id)
