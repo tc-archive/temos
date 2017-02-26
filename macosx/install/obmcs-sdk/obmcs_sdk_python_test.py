@@ -40,16 +40,16 @@ def list_users(config, compartment_ocid):
 def init_network(config):
     return oraclebmc.core.virtual_network_client.VirtualNetworkClient(config)
 
-# def list_vcns(config, compartment_ocid):
-#     identity = init_network(config)
-#     response = identity.list_vcns(compartment_id=compartment_ocid)
-#     vcns = response.data
-#     print("num vcns: {}".format(len(vcns)))
-#     for idx, vcn in enumerate(vcns):
-#         print("vcn[{}] : {}".format(idx, vcn))
-#     return vcns
-#
-# VCN_CIDR_BLOCK="192.168.0.0/28"
+def list_vcns(config, compartment_ocid):
+    identity = init_network(config)
+    response = identity.list_vcns(compartment_id=compartment_ocid)
+    vcns = response.data
+    print("num vcns: {}".format(len(vcns)))
+    for idx, vcn in enumerate(vcns):
+        print("vcn[{}] : {}".format(idx, vcn))
+    return vcns
+
+VCN_CIDR_BLOCK="192.168.0.0/28"
 # def create_vcn(config, compartment_ocid):
 #     network = init_network(config)
 #     request = CreateVcnDetails()
@@ -61,7 +61,7 @@ def init_network(config):
 #     vcn = response.data
 #     print("create vcn: {}".format(volume))
 #     return vcn
-#
+
 # def delete_vcn(config, vcn_ocid):
 #     network = init_network(config)
 #     response = network.delete_vcn(vcn_ocid)
@@ -78,7 +78,7 @@ def list_subnets(config, compartment_ocid, vcn_ocid):
     return subnets
 
 SUBNET_CIDR_BLOCK=VCN_CIDR_BLOCK
-SUBNET_AVAILABILITY_DOMAIN=="NWuj:PHX-AD-3"
+SUBNET_AVAILABILITY_DOMAIN="NWuj:PHX-AD-3"
 def create_subnet(config, compartment_ocid, vcn_ocid):
     network = init_network(config)
     request = CreateSubnetDetails()
@@ -227,7 +227,7 @@ if __name__ == "__main__":
     # delete_vcn(CONFIG, vcn_ocid)
     list_vcns(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
 
-    list_subnetsCONFIG, BRISTOL_CLOUD_COMPARTMENT_ID, vcn_ocid)
+    list_subnets(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID, vcn_ocid)
 
     # instance_ocid = "ocid1.instance.oc1.phx.abyhqljrzih7t6psauzroi2bshosfgvjfrixjljlmctyepjrxt3mqymam3ga"
     # instance_ocid = launch_instance(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID).id
