@@ -223,6 +223,8 @@ let g:syntastic_loc_list_height=5
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
+nmap <silent> <F3> :SyntasticReset<CR>
+
 
 "== python config =============================================================
 
