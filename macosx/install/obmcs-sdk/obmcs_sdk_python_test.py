@@ -49,24 +49,24 @@ def list_vcns(config, compartment_ocid):
         print("vcn[{}] : {}".format(idx, vcn))
     return vcns
 
-VCN_CIDR_BLOCK="192.168.0.0/28"
-# def create_vcn(config, compartment_ocid):
-#     network = init_network(config)
-#     request = CreateVcnDetails()
-#     request.compartment_id = compartment_ocid
-#     request.cidr_block = VCN_CIDR_BLOCK
-#     request.display_name = "trjl-test-vcn"
-#     request.description = "Created with the Python SDK"
-#     response = network.create_vcn(request)
-#     vcn = response.data
-#     print("create vcn: {}".format(volume))
-#     return vcn
+VCN_CIDR_BLOCK="192.168.0.0/27"
+def create_vcn(config, compartment_ocid):
+    network = init_network(config)
+    request = CreateVcnDetails()
+    request.compartment_id = compartment_ocid
+    request.cidr_block = VCN_CIDR_BLOCK
+    request.display_name = "trjl-test-vcn"
+    request.description = "Created with the Python SDK"
+    response = network.create_vcn(request)
+    vcn = response.data
+    print("create vcn: {}".format(vcn))
+    return vcn
 
-# def delete_vcn(config, vcn_ocid):
-#     network = init_network(config)
-#     response = network.delete_vcn(vcn_ocid)
-#     print("deleting vcn: {}".format(vcn_ocid))
-#     return response.data
+def delete_vcn(config, vcn_ocid):
+    network = init_network(config)
+    response = network.delete_vcn(vcn_ocid)
+    print("deleting vcn: {}".format(vcn_ocid))
+    return response.data
 
 def list_subnets(config, compartment_ocid, vcn_ocid):
     identity = init_network(config)
@@ -77,7 +77,7 @@ def list_subnets(config, compartment_ocid, vcn_ocid):
         print("subnet[{}] : {}".format(idx, subnet))
     return subnets
 
-SUBNET_CIDR_BLOCK=VCN_CIDR_BLOCK
+SUBNET_CIDR_BLOCK="192.168.0.0/28"
 SUBNET_AVAILABILITY_DOMAIN="NWuj:PHX-AD-3"
 def create_subnet(config, compartment_ocid, vcn_ocid):
     network = init_network(config)
@@ -89,12 +89,12 @@ def create_subnet(config, compartment_ocid, vcn_ocid):
     # dhcp_options_id =
     # route_table_id =
     # security_list_ids =
-    request.display_name = "trjl-test-vcn"
+    request.display_name = "trjl-test-vcn-subnet"
     request.description = "Created with the Python SDK"
     response = network.create_subnet(request)
     subnet = response.data
-    print("create subnet: {}".format(volume))
-    return vcn
+    print("create subnet: {}".format(subnet))
+    return subnet
 
 def delete_subnet(config, subnet_ocid):
     network = init_network(config)
@@ -219,25 +219,28 @@ if __name__ == "__main__":
     print("Config: {}".format(CONFIG))
     print("Config tenancy compartment id: {}".format(CONFIG["tenancy"]))
 
-    get_configured_user(CONFIG)
-    list_users(CONFIG, CONFIG["tenancy"])
+    # get_configured_user(CONFIG)
+    # list_users(CONFIG, CONFIG["tenancy"])
 
-    vcn_ocid = "ocid1.vcn.oc1.phx.aaaaaaaa3rrt52uro46gfyaztporjjmj5rcvgmubuw6bdsxenjekchmlmxha"
+    vcn_ocid = "ocid1.vcn.oc1.phx.aaaaaaaar3h6qeuux25rutju45j3eiwayytwgnm6y4kusjnwkiauhl6ur5wq"
     # vcn_ocid = create_vcn(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID).id
-    # delete_vcn(CONFIG, vcn_ocid)
     list_vcns(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
-
+    subnet_ocid = "ocid1.subnet.oc1.phx.aaaaaaaaml73o3jtkspuhha6ek552lsqyzupmmkuq3peuujtqs66t6r67j7q"
+    # subnet_ocid = create_subnet(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID, vcn_ocid).id
     list_subnets(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID, vcn_ocid)
+
+    delete_subnet(CONFIG, subnet_ocid)
+    delete_vcn(CONFIG, vcn_ocid)
 
     # instance_ocid = "ocid1.instance.oc1.phx.abyhqljrzih7t6psauzroi2bshosfgvjfrixjljlmctyepjrxt3mqymam3ga"
     # instance_ocid = launch_instance(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID).id
     # terminate_instance(CONFIG, instance_ocid)
-    list_instances(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
+    # list_instances(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
 
     # volume_ocid = "ocid1.volume.oc1.phx.abyhqljrr4t77t2q4f5x4hqgbeg6ooewvpuzunazxqrk426aedlhd2zmungq"
     # volume_ocid = create_volume(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID).id
     # delete_volume(CONFIG, volume_ocid)
-    list_volumes(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
+    # list_volumes(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
 
     # volume_attachment_id = "ocid1.volumeattachment.oc1.phx.abyhqljrexbeinbndxnltcd3l5awk2rsrl7eodre2u62o6rw6ja7edilznzq"
     # volume_attachment_id = attach_volume(CONFIG, instance_ocid, volume_ocid).id
