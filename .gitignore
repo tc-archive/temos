@@ -5,3 +5,9 @@ data/jenkins
 
 # vim swap files
 **/*.swp
+**/*.swo
+
+# temporary ignore
+macosx/install/obmcs-sdk/oracle-bmcs-python-sdk.zip
+macosx/install/obmcs-sdk/oracle-bmcs-python-sdk/
+macosx/install/obmcs-sdk/venv/
