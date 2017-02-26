@@ -9,16 +9,6 @@ from oraclebmc.core.models import CreateVolumeDetails
 from oraclebmc.core.models import LaunchInstanceDetails
 from oraclebmc.identity.models import CreateUserDetails
 
-BRISTOL_CLOUD_COMPARTMENT_ID="iocid1.compartment.oc1..aaaaaaaa3um2atybwhder4qttfhgon4j3hcxgmsvnyvx4flfjyewkkwfzwnq"
-
-#---------------------------------------------------------------------------------------------------
-# configuration
-
-def init_config():
-    config = oraclebmc.config.from_file("~/.oraclebmc/config", "trjl-test")
-    validate_config(config)
-    return config
-
 #---------------------------------------------------------------------------------------------------
 # user management
 
@@ -32,10 +22,9 @@ def get_configured_user(config):
     print("this user : {}".format(user))
     return user
 
-def list_users(config):
-    compartment_id = config["tenancy"]
+def list_users(config, compartment_ocid):
     identity = init_identity(config)
-    response = identity.list_users(compartment_id=compartment_id)
+    response = identity.list_users(compartment_id=compartment_ocid)
     users = response.data
     print("num users: {}".format(len(users)))
     for idx, user in enumerate(users):
@@ -60,22 +49,20 @@ def create_vcn(config):
 def init_storage(config):
     return oraclebmc.core.blockstorage_client.BlockstorageClient(config)
 
-def list_volumes(config):
-    # compartment_id = BRISTOL_CLOUD_COMPARTMENT_ID
-    compartment_id = config["tenancy"]
+def list_volumes(config, compartment_ocid):
     storage = init_storage(config)
-    response = storage.list_volumes(compartment_id=compartment_id)
+    response = storage.list_volumes(compartment_id=compartment_ocid)
     volumes = response.data
     print("num volumes: {}".format(len(volumes)))
     for idx, volume in enumerate(volumes):
         print("volume[{}] : {}".format(idx, volume))
     return volumes
 
-def create_volume(config):
+def create_volume(config, compartment_ocid):
     storage = init_storage(config)
     request = CreateVolumeDetails()
     request.availability_domain=DOMAIN_3
-    request.compartment_id = config["tenancy"]
+    request.compartment_id = compartment_ocid
     request.size_in_mbs=262144
     # requst.volume_backup_id=
     request.display_name = "trjl-test-instance-volume"
@@ -99,11 +86,9 @@ def delete_volume(config, volume_ocid):
 def init_compute(config):
     return oraclebmc.core.compute_client.ComputeClient(config)
 
-def list_instances(config):
-    # compartment_id = BRISTOL_CLOUD_COMPARTMENT_ID
-    compartment_id = config["tenancy"]
+def list_instances(config, compartment_ocid):
     compute = init_compute(config)
-    response = compute.list_instances(compartment_id=compartment_id)
+    response = compute.list_instances(compartment_id=compartment_ocid)
     instances = response.data
     print("num instances: {}".format(len(instances)))
     for idx, instance in enumerate(instances):
@@ -114,11 +99,11 @@ UBUNTU_IMAGE_OCID="ocid1.image.oc1.phx.aaaaaaaaxsufrpzn72dvhry5swbuwnuldcn3eko3c
 SHAPE_VS1="VM.Standard1.1"
 DOMAIN_3="NWuj:PHX-AD-3"
 SUBNET="ocid1.subnet.oc1.phx.aaaaaaaalyd5je5flygivxi66aem23jqsbeu7fwru3vod7fxlthutjidnh7a"
-def launch_instance(config):
+def launch_instance(config, compartment_ocid):
     compute = init_compute(config)
     request = LaunchInstanceDetails()
     request.availability_domain=DOMAIN_3
-    request.compartment_id = config["tenancy"]
+    request.compartment_id = compartment_ocid
     request.image_id=UBUNTU_IMAGE_OCID
     request.shape=SHAPE_VS1
     request.subnet_id=SUBNET
@@ -162,24 +147,31 @@ def get_volume_attachment(config, volume_attachment_ocid):
 #---------------------------------------------------------------------------------------------------
 # main
 
+BRISTOL_CLOUD_COMPARTMENT_ID="ocid1.compartment.oc1..aaaaaaaa3um2atybwhder4qttfhgon4j3hcxgmsvnyvx4flfjyewkkwfzwnq"
+
+def init_config():
+    config = oraclebmc.config.from_file("~/.oraclebmc/config", "trjl-test")
+    validate_config(config)
+    return config
+
 if __name__ == "__main__":
     print("OpenSSL Version: {}".format(ssl.OPENSSL_VERSION))
     CONFIG = init_config()
     print("Config: {}".format(CONFIG))
+    print("Config tenancy compartment id: {}".format(CONFIG["tenancy"]))
     # get_configured_user(CONFIG)
     # list_users(CONFIG)
-    
+
     # instance_ocid = launch_instance(CONFIG).id
     instance_ocid = "ocid1.instance.oc1.phx.abyhqljrzih7t6psauzroi2bshosfgvjfrixjljlmctyepjrxt3mqymam3ga"
     # terminate_instance(CONFIG, instance_ocid)
-    list_instances(CONFIG)
-    
+    list_instances(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
+
     # volume_ocid = create_volume(CONFIG).id
     volume_ocid = "ocid1.volume.oc1.phx.abyhqljrr4t77t2q4f5x4hqgbeg6ooewvpuzunazxqrk426aedlhd2zmungq"
     # delete_volume(CONFIG, volume_ocid)
-    list_volumes(CONFIG)
-    
+    list_volumes(CONFIG, BRISTOL_CLOUD_COMPARTMENT_ID)
+
     # volume_attachment_id = attach_volume(CONFIG, instance_ocid, volume_ocid).id
     volume_attachment_id = "ocid1.volumeattachment.oc1.phx.abyhqljrexbeinbndxnltcd3l5awk2rsrl7eodre2u62o6rw6ja7edilznzq"
     get_volume_attachment(CONFIG, volume_attachment_id)
-
