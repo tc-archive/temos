@@ -2,14 +2,13 @@
 
 from rx import Observable, Observer
 
-
 def push_five_strings(observer):
-	observer.on_next("Alpha")
-	observer.on_next("Beta")
-	observer.on_next("Gamma")
-	observer.on_next("Delta")
-	observer.on_next("Epsilon")
-	observer.on_completed()
+    observer.on_next("Alpha")
+    observer.on_next("Beta")
+    observer.on_next("Gamma")
+    observer.on_next("Delta")
+    observer.on_next("Epsilon")
+    observer.on_completed()
 
 
 class PrintObserver(Observer):
@@ -25,8 +24,8 @@ class PrintObserver(Observer):
 
 
 def main():
-	source = Observable.create(push_five_strings)
-	source.subscribe(PrintObserver())
+    source = Observable.create(push_five_strings)
+    source.subscribe(PrintObserver())
 
 
 if __name__ == "__main__":

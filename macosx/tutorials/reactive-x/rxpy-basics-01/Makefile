@@ -5,6 +5,7 @@ VENV_DIR := venv
 PYTHON_CC := /usr/local/bin/python
 
 .PHONY: default
+
 default: run clean
 
 all:
