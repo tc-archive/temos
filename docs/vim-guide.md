@@ -198,4 +198,21 @@
 8.  Jump to global sumbol definition: <ctrl-]> and <ctrl-T> (to return) [NB: requires tags file]
 ```
 
+----------------------------------------------------------------------------------------------------
+##### Syntastic
+
+* The Syntastic plugin must be installed and configured.
+
+* Any linters and checkers must be installed and configured globally,
+
+```
+1.  Check/Lint file                     : :SyntasticCheck
+
+2.  Close location (error) window       : :SyntasticReset
+
+3.  Open/Close location (error) window  : :lopen (open), :lclose (close)
+
+4.  Next/Previous location error        : :lne[xt] and :lp[revious]
+```
+
 
