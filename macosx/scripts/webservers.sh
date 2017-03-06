@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # *** WEB SERVERS *********************************************************************************
-startWebServer() {
+function _temos_start_web_server() {
     SERVER_TYPE=$1
     PORT=$2
     # default port
@@ -18,5 +18,5 @@ startWebServer() {
         echo 'Usage: webserver [python|node] [PORT]'
     fi
 }
-alias ws='startWebServer'
+alias temos-ws-start='_temos_start_web_server'
 

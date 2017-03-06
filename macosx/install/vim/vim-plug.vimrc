@@ -222,6 +222,8 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_loc_list_height=5
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
+"# python checker: flake8, pyflakes, pylint and python
+let g:syntastic_python_checkers = ['pylint']
 
 nmap <silent> <F3> :SyntasticReset<CR>
 
@@ -240,12 +242,12 @@ EOF
 
 "--- configure indentation : pep8
 au BufNewFile,BufRead *.py
-    \ set tabstop=4
-    \ set softtabstop=4
-    \ set shiftwidth=4
-    \ set textwidth=79
-    \ set expandtab
-    \ set autoindent
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=99 |
+    \ set expandtab |
+    \ set autoindent |
     \ set fileformat=unix
 
 
@@ -253,6 +255,6 @@ au BufNewFile,BufRead *.py
 
 "--- configure indentation
 au BufNewFile,BufRead *.js, *.html, *.css
-    \ set tabstop=2
-    \ set softtabstop=2
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
     \ set shiftwidth=2

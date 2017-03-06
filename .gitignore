@@ -11,3 +11,6 @@ data/jenkins
 macosx/install/obmcs-sdk/oracle-bmcs-python-sdk.zip
 macosx/install/obmcs-sdk/oracle-bmcs-python-sdk/
 macosx/install/obmcs-sdk/venv/
+
+# dont check-in python virtualenv environments
+**/venv

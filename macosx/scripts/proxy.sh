@@ -5,7 +5,7 @@ DEFAULT_FTP_PROXY=
 DEFAULT_RSYNC_PROXY=
 
 # enable the default or specified proxy
-function proxy-on() {
+function _temos_proxy_on() {
   local _proxy=${DEFAULT_HTTP_PROXY}
   if [[ ! -z "$1" ]]; then 
     _proxy=$1 
@@ -19,7 +19,7 @@ function proxy-on() {
 }
 
 # disable the terminal proxies
-function proxy-off() {
+function _temos_proxy_off() {
   unset HTTP_PROXY
   unset HTTPS_PROXY
   unset http_proxy
@@ -28,6 +28,6 @@ function proxy-off() {
   unset rsync_proxy
 }
 
-alias proxy-on="proxy-on"
-alias proxy-off="proxy-off"
-alias proxy-list="env | grep proxy | sort"
+alias temos-proxy-on="_temos_proxy_on"
+alias temos-proxy-off="_temos_proxy_off"
+alias temos-proxy-list="env | grep proxy | sort"
