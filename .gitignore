@@ -1,6 +1,6 @@
 data/jenkins
 
-# bin directory
+# no Temos binaraies
 /bin
 
 # vim swap files
@@ -12,5 +12,17 @@ macosx/install/obmcs-sdk/oracle-bmcs-python-sdk.zip
 macosx/install/obmcs-sdk/oracle-bmcs-python-sdk/
 macosx/install/obmcs-sdk/venv/
 
-# dont check-in python virtualenv environments
+# no python virtualenv environments
 **/venv
+
+# no packer_caches or ouputs
+**/packer_cahe
+**/output-virtualbox-iso/
+
+# no iso files
+**/*.iso
+
+# no virtual box artifacts
+**/*.box
+**/*.vmdk
+**/*.ovf
