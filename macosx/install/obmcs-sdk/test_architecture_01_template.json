@@ -1,0 +1,37 @@
+{
+  "compartments" : [
+    {
+      "name" : "bristol-cloud",
+      "networks" : [
+        {
+          "name" : "spinnaker-1cd-test-vcn",
+          "cidr_block" : "192.168.0.0/27",
+          "subnets" : [
+            {
+              "name" : "spinnaker-1cd-test-vcn-subnet",
+              "availability_domain" : "NWuj:PHX-AD-2",
+              "cidr_block" : "192.168.0.0/28",
+              "instances": [
+                {
+                  "name" : "spinnaker-1cd-test-instance-01",
+                  "image_ocid": "ocid1.image.oc1.phx.aaaaaaaaxsufrpzn72dvhry5swbuwnuldcn3eko3cx6g7z4tw4qfwkq2zkra",
+                  "instance_shape" : "VM.Standard1.1",
+                  "metadata" : {
+                     "ssh_authorized_keys" : "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNrN6bax4xkFv5YSPHf+Rei2NUxyatkC9+ql4ZeFHyQvjouKEqtdEZ7MBKyrP/GpaEG44u4tpFwlpmBq+7/5+8ZKbC7zY3jeg4n6Wnc054ObBQriTtWDI/eimvHGEakkcSHE/px2j2m8IDcd/E4ksf7UxD0uGnUOYzLhbbus86aJBRATGGY3fuMy5q8D7VLSie4HLuaaTCzFjXe50q2Rbh60pRa1ZO3lpg6B6CteJy5fJ3wJBvByeWCttEsiZ6vcPCUUsyXlLA2PCWEY2vfVxEWtEfHUfu4eosIy2Id7LlmzB9aMRfyCvKKs/1QfkPM42IXD3VOBkAiHFmTck9pK2J krisjaco@krisjaco-mac"
+                   },
+                  "volumes" : [
+                    {
+                      "display_name" : "spinnaker-1cd-test-instance-volume",
+                      "attachment_type" : "iscsi",
+                      "size_in_mbs" : 262144
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
