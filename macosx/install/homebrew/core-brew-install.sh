@@ -16,6 +16,7 @@ brew install cmake
 brew install curl
 brew install emacs
 brew install git
+brew install gdb
 brew install gnu-tar
 brew install jq
 brew install mercurial
@@ -24,6 +25,7 @@ brew install tmux
 brw install macvim
 brew install netcat netcat6
 brew install nmap
+brew install valgrind
 brew install wget
 brew install wireshark
 
@@ -66,3 +68,6 @@ brew install awscli
 brew install etcdctl
 brew install fleetctl
 brew install kubectl
+
+# --- utils ---
+brew install imagemagick
