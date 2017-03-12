@@ -1,7 +1,5 @@
 #!/bin/bash -e
 
-# set -e
-
 #export PACKER_LOG=1
 rm packer_virtualbox-iso_virtualbox.box || true
 packer build  -force -only virtualbox-iso packer.json
