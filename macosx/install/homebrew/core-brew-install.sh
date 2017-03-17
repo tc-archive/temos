@@ -21,6 +21,7 @@ brew install gnu-tar
 brew install jq
 brew install mercurial
 brew install tmux
+brew install selenium-server-standalone geckodriver chromedriver
 # brew install svn
 brw install macvim
 brew install netcat netcat6
