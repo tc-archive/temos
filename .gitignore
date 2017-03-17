@@ -15,6 +15,14 @@ macosx/install/obmcs-sdk/venv/
 # no python virtualenv environments
 **/venv
 
+# no node suports file
+**/node_modules/
+npm-debug.log
+
+# elixer and mix
+_build
+deps
+
 # no packer_caches or ouputs
 **/packer_cahe
 **/output-virtualbox-iso/
