@@ -29,5 +29,9 @@ use Mix.Config
 #
 #     import_config "#{Mix.env}.exs"
 
-config :hound, browser: "chrome"
+config :hound, 
+  browser: "chrome"
 
+config :logger, 
+  backends: [:console],              # default, support for additional log sinks
+  compile_time_purge_level: :debug   # purges logs with lower level than this

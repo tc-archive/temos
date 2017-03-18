@@ -2,12 +2,13 @@ defmodule ElixirScraper do
   @moduledoc """
   Documentation for ElixirScraper.
   """
-
+  require Logger
   use Hound.Helpers
 
   @site_url           "https://elixirsips.dpdcart.com"
   @login_url_fragment "/subscriber/login"
-
+  
+  @browser_downloads  "/Users/Temple/TemOS/Downloads"
 
   @doc """
   Logs into the main web and navigates to the list of available lessons. The page in returned.
@@ -77,7 +78,7 @@ defmodule ElixirScraper do
   """
   def start do
     # start scraping session with selenium serer
-    IO.puts "starting"
+    Logger.info "starting..."
     Hound.start_session
     lessons_page = login()
     # extract the list of lessons from the main contents page
@@ -86,9 +87,12 @@ defmodule ElixirScraper do
             |> Enum.take(2)
     # extract the lesson info and download urls from each lesson page.
 	lesson_infos = extract_lesson_infos(lessons)
-    for lesson_info <- Enum.reverse(lesson_infos), do: IO.puts("lesson_info: #{Poison.encode!(lesson_info)}\n")
+    for lesson_info <- Enum.reverse(lesson_infos) do 
+      Logger.debug "lesson_info: #{Poison.encode!(lesson_info)}\n"
+    end
     # end the scraping sessions
     # Hound.end_session
+    Logger.info "finished."
   end
 
 end
