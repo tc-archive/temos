@@ -33,24 +33,30 @@
 ```
 
 ----------------------------------------------------------------------------------------------------
-#### Window Panes (Normal Mode - <ctrl-W>)
+#### Vim Windows (Normal Mode - All windows commands begin with: <ctrl-W>)
 
 ```
 1.  New window                      : <ctrl-W>n
 
-2.  Create vertical split pane      : :sv <filename>
-
-3.  Create horizontal split pane    : :vs <filename>
-
-4.  Window navigation               : <ctrl-W>k (up) and ctrl-W>j (down)
+2.  Window navigation               : <ctrl-W>k (up) and ctrl-W>j (down)
                                     : <ctrl-W>h (left) and ctrl-W>l (right)
+                                    : <ctrl-W>w (cycle)
 
-5.  Adjust window size              : <ctrl-w>+ (increase) and <ctrl-w>- (decrease)
+3.  Adjust window size              : <ctrl-w>+ (increase) and <ctrl-w>- (decrease)
                                     : <ctrl-w>_ (maximise) and <ctrl-w>= (equalize)
 ```
 
 ----------------------------------------------------------------------------------------------------
-#### Window Panes (Normal Mode)
+#### Vim Panes (Normal Mode)
+
+```
+1.  Create vertical split pane      : :sv <filename>
+
+2.  Create horizontal split pane    : :vs <filename>
+```
+
+----------------------------------------------------------------------------------------------------
+#### Vim Tabs (Normal Mode)
 
 ```
 1.  New tab                         : :tabe <filename>
@@ -59,7 +65,7 @@
 ```
 
 ----------------------------------------------------------------------------------------------------
-# Movement (Normal Mode)
+#### File Movement (Normal Mode)
 
 1.  Cursor movement                 : h (left), j (down), k(up), and l (right)
 
