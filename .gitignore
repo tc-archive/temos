@@ -12,6 +12,9 @@ macosx/install/obmcs-sdk/oracle-bmcs-python-sdk.zip
 macosx/install/obmcs-sdk/oracle-bmcs-python-sdk/
 macosx/install/obmcs-sdk/venv/
 
+# gcc artifacts
+*/*.dSYM
+
 # no python virtualenv environments
 **/venv
 
