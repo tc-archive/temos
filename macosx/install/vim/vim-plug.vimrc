@@ -30,8 +30,8 @@ Plug 'scrooloose/syntastic'
 Plug 'tmhedberg/SimpylFold'
 
 "--- code completion
-Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp', 'go'] , 'do': './install.sh' }
-autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
+" Plug 'Valloric/YouCompleteMe', { 'for': ['c', 'cpp', 'go'] , 'do': './install.sh' }
+" autocmd! User YouCompleteMe if !has('vim_starting') | call youcompleteme#Enable() | endif
 
 "--- git integration
 Plug 'tpope/vim-fugitive'
@@ -88,16 +88,16 @@ call plug#end()
 "== general config ============================================================
 
 "--- au command to detect bad whitespace
-au BufRead,BufNewFile
-  \ *.c, *.cpp, *.h,
-  \ *.clj, *.edn,
-  \ *.erl,
-  \ *.ex, *.exs,
-  \ *.go,
-  \ *.hs, *.cabal,
-  \ *.py, *.pyw,
-  \ *.rb
-  \ match BadWhitespace /\s\+$/
+" au BufRead,BufNewFile
+"   \ *.c, *.cpp, *.h,
+"   \ *.clj, *.edn,
+"   \ *.erl,
+"   \ *.ex, *.exs,
+"   \ *.go,
+"   \ *.hs, *.cabal,
+"   \ *.py, *.pyw,
+"   \ *.rb
+"   \ match BadWhitespace /\s\+$/
 
 "--- set clipboard
 set clipboard=unnamed
@@ -217,13 +217,15 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
+let g:syntastic_always_populate_loc_list=1
+let g:syntastic_auto_loc_list=1
 let g:syntastic_loc_list_height=5
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-"# python checker: flake8, pyflakes, pylint and python
-let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_check_on_open=1
+let g:syntastic_check_on_wq=0
+"# python checkers: flake8, pyflakes, pylint and python
+let g:syntastic_python_checkers=['pylint']
+"# c checkers: gcc, make 
+let g:syntastic_c_checkers=['gcc']
 
 nmap <silent> <F3> :SyntasticReset<CR>
 
