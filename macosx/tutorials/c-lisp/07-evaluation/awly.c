@@ -59,7 +59,7 @@ double eval_op(double x, char* op, double y) {
 
 /* Pqrse Tree */
 double eval(mpc_ast_t* t) {
-    
+
     /* If tagged as a Number return the value */
     if (strstr(t->tag, "number")) {
         return atof(t->contents);
@@ -78,7 +78,7 @@ double eval(mpc_ast_t* t) {
         i++;
     }
 
-    return x;
+    return eval_op(0, op, x);
 }
 
 int main (int argc, char** argv) {
@@ -115,7 +115,7 @@ int main (int argc, char** argv) {
         mpc_result_t r;
         if (mpc_parse("<stdin>", input, Awly, &r)) {
             /* Success - Print AST */
-            // mpc_ast_print(r.output);
+            //mpc_ast_print(r.output);
             /* Print Results */
             double result = eval(r.output);
             printf("%g\n", result);
