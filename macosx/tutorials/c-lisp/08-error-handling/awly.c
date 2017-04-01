@@ -46,18 +46,23 @@ enum { LVAL_NUM, LVAL_ERR };
 /* Error Types */
 enum { LERR_DIV_ZERO, LERR_BAD_OP, LERR_BAD_NUM };
 
+
+union Data {
+    double num;
+    int err;
+};
+
 /* Lisp Value Structure */
 typedef struct {
     int type;
-    double num;
-    int err;
+    union Data data;
 } lval;
 
 /* Create a new lval number type */
 lval lval_num(double x) {
     lval v;
     v.type = LVAL_NUM;
-    v.num = x;
+    v.data.num = x;
     return v;
 }
 
@@ -65,7 +70,7 @@ lval lval_num(double x) {
 lval lval_err(int x) {
     lval v;
     v.type = LVAL_ERR;
-    v.err = x;
+    v.data.err = x;
     return v;
 }
 
@@ -73,10 +78,10 @@ lval lval_err(int x) {
 void lval_print(lval v) {
     switch (v.type) {
         case LVAL_NUM:
-            printf("%g", v.num);
+            printf("%g", v.data.num);
             break;
         case LVAL_ERR:
-            switch (v.err) {
+            switch (v.data.err) {
                 case LERR_DIV_ZERO:
                     printf("Error: Division by 0");
                     break;
@@ -105,24 +110,24 @@ lval eval_op(lval x, char* op, lval y) {
     if (x.type == LVAL_ERR) { return x; }
     if (y.type == LVAL_ERR) { return y; }
 
-    if (strcmp(op, "+") == 0) { return lval_num(x.num + y.num); }
-    if (strcmp(op, "-") == 0) { return lval_num(x.num - y.num); }
-    if (strcmp(op, "*") == 0) { return lval_num(x.num * y.num); }
+    if (strcmp(op, "+") == 0) { return lval_num(x.data.num + y.data.num); }
+    if (strcmp(op, "-") == 0) { return lval_num(x.data.num - y.data.num); }
+    if (strcmp(op, "*") == 0) { return lval_num(x.data.num * y.data.num); }
     if (strcmp(op, "/") == 0) { 
-        return  (y.num != 0) 
-            ? lval_num(x.num / y.num)
+        return  (y.data.num != 0) 
+            ? lval_num(x.data.num / y.data.num)
             : lval_err(LERR_DIV_ZERO);
     }
-    if (strcmp(op, "%") == 0) { return lval_num(fmod(x.num, y.num)); }
-    if (strcmp(op, "^") == 0) { return lval_num(pow(x.num, y.num)); }
-    if (strcmp(op, "add") == 0) { return lval_num(x.num + y.num); }
-    if (strcmp(op, "sub") == 0) { return lval_num(x.num - y.num); }
-    if (strcmp(op, "mul") == 0) { return lval_num(x.num * y.num); }
-    if (strcmp(op, "div") == 0) { return lval_num(x.num / y.num); }
-    if (strcmp(op, "mod") == 0) { return lval_num(fmod(x.num, y.num)); }
-    if (strcmp(op, "exp") == 0) { return lval_num(pow(x.num, y.num)); }
-    if (strcmp(op, "max") == 0) { return (x.num >= y.num) ? x : y; }
-    if (strcmp(op, "min") == 0) { return (x.num <= y.num) ? x : y; }
+    if (strcmp(op, "%") == 0) { return lval_num(fmod(x.data.num, y.data.num)); }
+    if (strcmp(op, "^") == 0) { return lval_num(pow(x.data.num, y.data.num)); }
+    if (strcmp(op, "add") == 0) { return lval_num(x.data.num + y.data.num); }
+    if (strcmp(op, "sub") == 0) { return lval_num(x.data.num - y.data.num); }
+    if (strcmp(op, "mul") == 0) { return lval_num(x.data.num * y.data.num); }
+    if (strcmp(op, "div") == 0) { return lval_num(x.data.num / y.data.num); }
+    if (strcmp(op, "mod") == 0) { return lval_num(fmod(x.data.num, y.data.num)); }
+    if (strcmp(op, "exp") == 0) { return lval_num(pow(x.data.num, y.data.num)); }
+    if (strcmp(op, "max") == 0) { return (x.data.num >= y.data.num) ? x : y; }
+    if (strcmp(op, "min") == 0) { return (x.data.num <= y.data.num) ? x : y; }
     return lval_num(0);
 }
 
@@ -187,7 +192,7 @@ int main (int argc, char** argv) {
         mpc_result_t r;
         if (mpc_parse("<stdin>", input, Awly, &r)) {
             /* Success - Print AST */
-            mpc_ast_print(r.output);
+            // mpc_ast_print(r.output);
             /* Print Results */
             lval result = eval(r.output);
             lval_println(result);
