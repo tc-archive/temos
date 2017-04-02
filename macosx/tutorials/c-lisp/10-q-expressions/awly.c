@@ -131,8 +131,8 @@ lval* lval_read(mpc_ast_t* t) {
     /* handle root ('>') and sexpr */
     lval* x = NULL;
     if (strcmp(t->tag, ">") == 0) { x = lval_sexpr(); }
-    if (strcmp(t->tag, "sexpr")) { x = lval_sexpr(); }
-    if (strcmp(t->tag, "qexpr")) { x = lval_qexpr(); }
+    if (strstr(t->tag, "sexpr")) { x = lval_sexpr(); }
+    if (strstr(t->tag, "qexpr")) { x = lval_qexpr(); }
     
     for (int i = 0; i < t->children_num; i++) {
         if (strcmp(t->children[i]->contents, "(") == 0) { continue; }
@@ -168,6 +168,8 @@ void lval_del(lval* v) {
                 lval_del(v->cell[i]);
             }
             break;
+            // free memory used to allocate the pointers
+            free(v->cell);
     }
     // free the lval struct itself
     free(v);
@@ -192,8 +194,8 @@ void lval_print(lval* v) {
         case LVAL_NUM:   printf("%g", v->num); break;
         case LVAL_ERR:   printf("error: %s", v->err); break;
         case LVAL_SYM:   printf("%s", v->sym); break;
-        case LVAL_QEXPR: lval_expr_print(v, '{', '}'); break;
         case LVAL_SEXPR: lval_expr_print(v, '(', ')'); break;
+        case LVAL_QEXPR: lval_expr_print(v, '{', '}'); break;
     }
 }
 
@@ -338,6 +340,7 @@ int main (int argc, char** argv) {
     mpc_parser_t* Number = mpc_new("number");
     mpc_parser_t* Symbol = mpc_new("symbol");
     mpc_parser_t* Sexpr  = mpc_new("sexpr");
+    mpc_parser_t* Qexpr  = mpc_new("qexpr");
     mpc_parser_t* Expr   = mpc_new("expr");
     mpc_parser_t* Awly   = mpc_new("awly");
 
@@ -350,10 +353,10 @@ int main (int argc, char** argv) {
                     | \"min\" | \"max\" ;                                       \
          sexpr    : '(' <expr>* ')' ;                                           \
          qexpr    : '{' <expr>* '}' ;                                           \
-         expr     : <number> | <symbol> | <sexpr> ;                             \
+         expr     : <number> | <symbol> | <sexpr> | <qexpr>  ;                  \
          awly     : /^/ <expr>* /$/ ;                                           \
         ",
-        Number, Symbol, Sexpr, Expr, Awly);
+        Number, Symbol, Sexpr, Qexpr, Expr, Awly);
    
     // Print Prelude Header
     puts("Awlyspian Version 0.0.8");
@@ -388,7 +391,7 @@ int main (int argc, char** argv) {
     }
 
     // Clean-up Parsers
-    mpc_cleanup(6, Number, Symbol, Sexpr, Expr, Awly);
+    mpc_cleanup(6, Number, Symbol, Sexpr, Qexpr, Expr, Awly);
 
     return 0;
 }
