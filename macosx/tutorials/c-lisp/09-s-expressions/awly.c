@@ -123,7 +123,7 @@ lval* lval_read(mpc_ast_t* t) {
     /* handle root ('>') and sexpr */
     lval* x = NULL;
     if (strcmp(t->tag, ">") == 0) { x = lval_sexpr(); }
-    if (strcmp(t->tag, "sexpr")) { x = lval_sexpr(); }
+    if (strstr(t->tag, "sexpr")) { x = lval_sexpr(); }
 
     for (int i = 0; i < t->children_num; i++) {
         if (strcmp(t->children[i]->contents, "(") == 0) { continue; }
