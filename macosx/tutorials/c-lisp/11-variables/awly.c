@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <math.h>
 #include "mpc.h"
 
@@ -123,7 +124,7 @@ lval* lval_sexpr() {
     return v;
 }
 
-/* Create a new lval qexpr type */
+// Create a new lval qexpr type
 lval* lval_qexpr() {
     lval* v = malloc(sizeof(lval));
     v->type = LVAL_QEXPR;
@@ -343,6 +344,15 @@ void lenv_put(lenv* e, lval* k, lval* v) {
     strcpy(e->syms[e->count - 1], k->sym);
 }
 
+void lenv_print(lenv* e) {
+    for (int i = 0; i < e->count; i++) {
+        char* sym = e->syms[i];
+        lval* lval = e->vals[i];
+        printf("env[%i]: %s => ", i, sym);
+        lval_println(lval);
+    }
+}
+
 //-------------------------------------------------------------------------------------------------
 // built-ins
 //
@@ -533,19 +543,6 @@ void lenv_add_builtins(lenv* e) {
     lenv_add_builtin(e, "/", builtin_div);
 }
 
-// declare lval_eval_sexpr
-// lval* lval_eval_sexpr(lenv* e, lval* v);
-// lval* lval_eval(lenv* e, lval* x);
-
-// lval* builtin_eval(lval* a) {
-//     LASSERT(a, a->count != 1, "Function 'eval' passed too many arguments.");
-//     LASSERT(a, a->cell[0]->type != LVAL_QEXPR, "Function 'eval' passed incorrect expression type.");
-//     
-//     lval* x = lval_take(a, 0);
-//     x->type = LVAL_SEXPR;
-//     return lval_eval(x);
-// }
-
 lval* builtin(lenv* e, lval* a, char* func) {
     if (strcmp("list", func) == 0) { return builtin_list(e, a); }
     if (strcmp("head", func) == 0) { return builtin_head(e, a); }
@@ -640,6 +637,23 @@ lval* lval_read(mpc_ast_t* t) {
     return x;
 }
 
+
+// -------------------------------------------------------------------------------------------------
+// repl commands
+
+int handle_repl_commands(lenv* env, char* input) {
+    int result = 0;
+    if (strcmp(input, "exit") == 0) {
+        result = 1;
+    }
+    else if (strcmp(input, "env") == 0) {
+        lenv_print(env);
+    }
+    return result;
+}
+
+
+
 // -------------------------------------------------------------------------------------------------
 // main
 
@@ -675,31 +689,37 @@ int main (int argc, char** argv) {
     lenv_add_builtins(e);
 
     // Infinite REPL Loop
-    while (1) {
+    int loop_4evah = 1;
+    while (loop_4evah) {
         // Input Buffer
         char* input = readline("awly> ");
         // Store Input History
         add_history(input);
-        // ParseInput
-        mpc_result_t r;
-        if (mpc_parse("<stdin>", input, Awly, &r)) {
-            // Success - Print AST 
-            mpc_ast_print(r.output);
-            // Print Results
-            lval* ast = lval_read(r.output);
-            lval_println(ast);
-            lval* e_ast = lval_eval(e, ast);
-            lval_println(e_ast);
-            lval_del(e_ast);
-            // Clean
-            mpc_ast_delete(r.output);
+
+        if (handle_repl_commands(e, input)) {
+            break;
         } else {
-            // Error
-            mpc_err_print(r.error);
-            mpc_err_delete(r.error);
+            // ParseInput
+            mpc_result_t r;
+            if (mpc_parse("<stdin>", input, Awly, &r)) {
+                // Success - Print AST 
+                // mpc_ast_print(r.output);
+                // Print Results
+                lval* ast = lval_read(r.output);
+                // lval_println(ast);
+                lval* e_ast = lval_eval(e, ast);
+                lval_println(e_ast);
+                lval_del(e_ast);
+                // Clean
+                mpc_ast_delete(r.output);
+            } else {
+                // Error
+                mpc_err_print(r.error);
+                mpc_err_delete(r.error);
+            }
+            // Free Input Buffer
+            free(input);
         }
-        // Free Input Buffer
-        free(input);
     }
     // tidy environmet
     lenv_del(e);
