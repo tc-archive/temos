@@ -641,13 +641,18 @@ lval* lval_read(mpc_ast_t* t) {
 // -------------------------------------------------------------------------------------------------
 // repl commands
 
-int handle_repl_commands(lenv* env, char* input) {
-    int result = 0;
+enum repl_state_t {EXIT, CMD, EVAL};
+typedef enum repl_state_t repl_state;
+
+repl_state handle_repl_commands(lenv* env, char* input) {
+    repl_state result = EVAL;
     if (strcmp(input, "exit") == 0) {
-        result = 1;
+        puts("Bye bye!");
+        result = EXIT;
     }
     else if (strcmp(input, "env") == 0) {
         lenv_print(env);
+        result = CMD;
     }
     return result;
 }
@@ -696,29 +701,36 @@ int main (int argc, char** argv) {
         // Store Input History
         add_history(input);
 
-        if (handle_repl_commands(e, input)) {
-            break;
-        } else {
-            // ParseInput
-            mpc_result_t r;
-            if (mpc_parse("<stdin>", input, Awly, &r)) {
-                // Success - Print AST 
-                // mpc_ast_print(r.output);
-                // Print Results
-                lval* ast = lval_read(r.output);
-                // lval_println(ast);
-                lval* e_ast = lval_eval(e, ast);
-                lval_println(e_ast);
-                lval_del(e_ast);
-                // Clean
-                mpc_ast_delete(r.output);
-            } else {
-                // Error
-                mpc_err_print(r.error);
-                mpc_err_delete(r.error);
-            }
-            // Free Input Buffer
-            free(input);
+        mpc_result_t r;
+        switch (handle_repl_commands(e, input)) {
+            case EXIT:
+                loop_4evah = 0;
+                break;
+            case CMD:
+                break;
+            case EVAL:
+                // ParseInput
+                if (mpc_parse("<stdin>", input, Awly, &r)) {
+                    // Success - Print AST 
+                    // mpc_ast_print(r.output);
+                    // Print Results
+                    lval* ast = lval_read(r.output);
+                    // lval_println(ast);
+                    lval* e_ast = lval_eval(e, ast);
+                    lval_println(e_ast);
+                    lval_del(e_ast);
+                    // Clean
+                    mpc_ast_delete(r.output);
+                } else {
+                    // Error
+                    mpc_err_print(r.error);
+                    mpc_err_delete(r.error);
+                }
+                // Free Input Buffer
+                free(input);
+                break;
+            default:
+                printf("Could not process: %s", input);
         }
     }
     // tidy environmet
