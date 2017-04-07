@@ -108,9 +108,11 @@ lval* lval_sym(char* s) {
 }
 
 // lval function pointer type constructor
-lval* lval_fun(lbuiltin func) {
+lval* lval_fun(lbuiltin func, char* name) {
     lval* v = malloc(sizeof(lval));
     v->type = LVAL_FUN;
+    v->sym = malloc(strlen(name) +1);
+    strcpy(v->sym, name);
     v->fun = func;
     return v;
 }
@@ -139,12 +141,15 @@ void lval_del(lval* v) {
         case LVAL_NUM:
             // nothing to free
             break;
+        case LVAL_SYM:
+            free(v->sym);
+            break;
         case LVAL_ERR:
-            // free the error string
             free(v->err);
             break;
         case LVAL_FUN:
-            // nothing to do
+            // funciton name bound to sym...
+            free(v->sym);
             break;
         case LVAL_QEXPR:
         case LVAL_SEXPR:
@@ -168,9 +173,6 @@ lval* lval_copy(lval* v) {
 
     switch (v->type) {
         // copy functions and numbers directly
-        case LVAL_FUN: 
-            x->fun = v->fun;
-            break;
         case LVAL_NUM:
             x->num = v->num;
             break;
@@ -180,6 +182,11 @@ lval* lval_copy(lval* v) {
             strcpy(x->err, v->err);
             break;
         case LVAL_SYM:
+            x->sym = malloc(strlen(v->sym) + 1);
+            strcpy(x->sym, v->sym);
+            break;
+        case LVAL_FUN: 
+            x->fun = v->fun;
             x->sym = malloc(strlen(v->sym) + 1);
             strcpy(x->sym, v->sym);
             break;
@@ -258,7 +265,7 @@ void lval_print_expr(lval* v, char open, char close) {
 
 void lval_print(lval* v) {
     switch (v->type) {
-        case LVAL_FUN:   printf("<function>"); break;
+        case LVAL_FUN:   printf("<function>: %s", v->sym); break;
         case LVAL_NUM:   printf("%g", v->num); break;
         case LVAL_ERR:   printf("error: %s", v->err); break;
         case LVAL_SYM:   printf("%s", v->sym); break;
@@ -527,7 +534,7 @@ lval* builtin_def(lenv* e, lval* a) {
 
 void lenv_add_builtin(lenv* e, char* name, lbuiltin func) {
     lval* k = lval_sym(name);
-    lval* v = lval_fun(func);
+    lval* v = lval_fun(func, name);
     lenv_put(e, k, v);
     lval_del(k);
     lval_del(v);
