@@ -444,16 +444,16 @@ lval* builtin_op(lenv* e, lval* a, char* op) {
     // process remaining elements
     while (a->count > 0) {
         lval* y = lval_pop(a, 0);
-        if (strcmp(op, "+") == 0 || strcmp(op, "add") == 0) { 
+        if (strcmp(op, "+") == 0) { 
             x->num += y->num; 
         }
-        else if (strcmp(op, "-") == 0 || strcmp(op, "sub") == 0) { 
+        else if (strcmp(op, "-") == 0) { 
             x->num -= y->num; 
         }
-        else if (strcmp(op, "*") == 0 || strcmp(op, "mul") == 0) { 
+        else if (strcmp(op, "*") == 0) { 
             x->num *= y->num; 
         }
-        else if (strcmp(op, "/") == 0 || strcmp(op, "div") == 0) {
+        else if (strcmp(op, "/") == 0) {
             if (y->num == 0) {
                 lval_del(x);
                 lval_del(y);
@@ -462,17 +462,14 @@ lval* builtin_op(lenv* e, lval* a, char* op) {
             }
             x->num /= y->num; 
         }
-        else if (strcmp(op, "%") == 0 || strcmp(op, "mod") == 0) { 
+        else if (strcmp(op, "%") == 0) { 
             x->num = fmod(x->num, y->num); 
         }
-        else if (strcmp(op, "^") == 0 || strcmp(op, "pow") == 0) { 
+        else if (strcmp(op, "^") == 0) { 
             x->num = pow(x->num, y->num); 
         }
-        else if (strcmp(op, "max") == 0) { 
-            x->num = (x->num >= y->num) ? x->num : y->num; 
-        }
-        else if (strcmp(op, "min") == 0) { 
-            x->num = (x->num <= y->num) ? x->num : y->num; 
+        else { 
+            x = lval_err("unknown builtin_op");
         }
         lval_del(y);
     }
@@ -494,6 +491,14 @@ lval* builtin_mul(lenv* e, lval* a) {
 
 lval* builtin_div(lenv* e, lval* a) {
     return builtin_op(e, a, "/");
+}
+
+lval* builtin_mod(lenv* e, lval* a) {
+    return builtin_op(e, a, "%");
+}
+
+lval* builtin_pow(lenv* e, lval* a) {
+    return builtin_op(e, a, "^");
 }
 
 // define an environment variable
@@ -541,6 +546,9 @@ void lenv_add_builtins(lenv* e) {
     lenv_add_builtin(e, "-", builtin_sub);
     lenv_add_builtin(e, "*", builtin_mul);
     lenv_add_builtin(e, "/", builtin_div);
+    lenv_add_builtin(e, "%", builtin_mod);
+    lenv_add_builtin(e, "^", builtin_pow);
+
 }
 
 lval* builtin(lenv* e, lval* a, char* func) {
@@ -625,7 +633,7 @@ lval* lval_read(mpc_ast_t* t) {
     if (strcmp(t->tag, ">") == 0) { x = lval_sexpr(); }
     if (strstr(t->tag, "sexpr")) { x = lval_sexpr(); }
     if (strstr(t->tag, "qexpr")) { x = lval_qexpr(); }
-    //  
+    // handle child nodes...  
     for (int i = 0; i < t->children_num; i++) {
         if (strcmp(t->children[i]->contents, "(") == 0) { continue; }
         if (strcmp(t->children[i]->contents, ")") == 0) { continue; }
@@ -677,7 +685,7 @@ int main (int argc, char** argv) {
     mpca_lang(MPCA_LANG_DEFAULT,
         "                                                                       \
          number   : /-?[0-9]+\\.?[0-9]*/ ;                                      \
-         symbol   : /[a-zA-Z0-9_+\\-*\\/\\\\=<>!&]+/ ;                          \
+         symbol   : /[a-zA-Z0-9_\\^%+\\-*\\/\\\\=<>!&]+/ ;                          \
          sexpr    : '(' <expr>* ')' ;                                           \
          qexpr    : '{' <expr>* '}' ;                                           \
          expr     : <number> | <symbol> | <sexpr> | <qexpr>  ;                  \
