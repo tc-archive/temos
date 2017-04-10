@@ -667,7 +667,6 @@ void lenv_add_builtins(lenv* e) {
     lenv_add_builtin(e, "/", builtin_div);
     lenv_add_builtin(e, "%", builtin_mod);
     lenv_add_builtin(e, "^", builtin_pow);
-
 }
 
 lval* builtin(lenv* e, lval* a, char* func) {
@@ -849,6 +848,31 @@ lval* lval_read(mpc_ast_t* t) {
     return x;
 }
 
+// -------------------------------------------------------------------------------------------------
+// repl commands
+
+char* lisp_fun     = "def {fun} (\\ {args body} {def (head args) (\\ (tail args) body)})";
+char* lisp_pack    = "fun {pack f & xs} {f xs}";
+char* lisp_unpack  = "fun {unpack f xs} {eval (join (list f) xs)}";
+char* lisp_curry   = "def {curry} pack";
+char* lisp_uncurry = "def {uncurry} unpack";
+
+void lenv_add_lisp_fn(mpc_parser_t* parser, lenv* e, char* lisp_fn_expr) {
+    mpc_result_t r;
+    mpc_parse("<stdin>", lisp_fn_expr, parser, &r);
+    lval* ast = lval_read(r.output);
+    lval* e_ast = lval_eval(e, ast);
+    lval_del(e_ast);
+    mpc_ast_delete(r.output);
+}
+
+void lenv_add_lisp_fns(mpc_parser_t* parser, lenv* env) {
+    lenv_add_lisp_fn(parser, env, lisp_fun);
+    lenv_add_lisp_fn(parser, env, lisp_pack);
+    lenv_add_lisp_fn(parser, env, lisp_unpack);
+    lenv_add_lisp_fn(parser, env, lisp_curry);
+    lenv_add_lisp_fn(parser, env, lisp_uncurry);
+}
 
 // -------------------------------------------------------------------------------------------------
 // repl commands
@@ -889,7 +913,7 @@ int main (int argc, char** argv) {
     mpca_lang(MPCA_LANG_DEFAULT,
         "                                                                       \
          number   : /-?[0-9]+\\.?[0-9]*/ ;                                      \
-         symbol   : /[a-zA-Z0-9_^%+\\-*\\/\\\\=<>!&]+/ ;                          \
+         symbol   : /[a-zA-Z0-9_^%+\\-*\\/\\\\=<>!&]+/ ;                        \
          sexpr    : '(' <expr>* ')' ;                                           \
          qexpr    : '{' <expr>* '}' ;                                           \
          expr     : <number> | <symbol> | <sexpr> | <qexpr>  ;                  \
@@ -899,11 +923,12 @@ int main (int argc, char** argv) {
     
     
     // Print Prelude Header
-    puts("Awlyspian Version 0.0.8");
+    puts("Awlyspian Version 0.0.9");
     puts("Press Ctrl-C to exit\n");
 
     lenv* e = lenv_new();
     lenv_add_builtins(e);
+    lenv_add_lisp_fns(Awly, e);
 
     // Infinite REPL Loop
     int loop_4evah = 1;
