@@ -6,7 +6,6 @@ from __future__ import print_function
 import math
 import operator as op
 
-
 SYMBOL = str
 LIST = list
 NUMBER = (int, float)
@@ -47,7 +46,7 @@ def parse(program):
     return read_tokens(tokenize(program))
 
 def standard_env():
-    "An environment with some Scheme standard procedures."
+    """An environment with some Scheme standard procedures."""
     env = ENV()
     env.update(vars(math)) # sin, cos, sqrt, etc.
     env.update({
@@ -87,25 +86,45 @@ def standard_env():
 GLOBAL_ENV = standard_env()
 
 def eval_sexpr(sexpr, env=GLOBAL_ENV):
-    "Evalaute an expression in the environment."
+    """Evalaute an expression in the environment."""
+    # variable references
     if isinstance(sexpr, SYMBOL):
         return env[sexpr]
+    # constant literal
     elif not isinstance(sexpr, LIST):
         return sexpr
+    # conditional
     elif sexpr[0] == 'if':
         (_, test, conseq, alt) = sexpr
         exp = (conseq if eval_sexpr(test, env) else alt)
         return eval_sexpr(exp, env)
+    # definition
     elif sexpr[0] == 'define':
         (_, var, exp) = sexpr
         env[var] = eval_sexpr(exp, env)
+    # procedure call
     else:
         proc = eval_sexpr(sexpr[0], env)
         args = [eval_sexpr(arg, env) for arg in sexpr[1:]]
         return proc(*args)
 
+def schemestr(exp):
+    """Convert a python object into a scheme readable object."""
+    if isinstance(exp, LIST):
+        return '(' + ' '.join(map(schemestr, exp)) + ')'
+    else:
+        return str(exp)
+
+def repl(prompt='awly> '):
+    """A REPL loop"""
+    while True:
+        val = eval_sexpr(parse(raw_input(prompt)))
+        if val is not None:
+            print(schemestr(val))
+
 def main():
     """Main"""
-    return 0
+    repl()
+
 if __name__ == '__main__':
     main()
