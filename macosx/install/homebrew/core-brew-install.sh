@@ -19,13 +19,14 @@ brew install git
 brew install gdb
 brew install gnu-tar
 brew install jq
-brew install mercurial
 brew install tmux
 brew install selenium-server-standalone geckodriver chromedriver
-# brew install svn
-brw install macvim
+brew install svn
+brew install macvim
+brew install mercurial
 brew install netcat netcat6
 brew install nmap
+brew install splint 
 brew install valgrind
 brew install wget
 brew install wireshark
@@ -40,11 +41,10 @@ brew install mono
 brew install node nvm
 brew install perl
 brew install python pillow numpy
-brew instal ruby
+brew installl ruby
 brew install rust
 
 # --- databases ---
-brew install 
 brew install mongodb
 brew install mysql
 brew install sqlite
