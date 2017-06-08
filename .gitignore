@@ -1,7 +1,14 @@
 data/jenkins
 
-# no Temos binaraies
+# temos binaraies
 /bin
+
+# secret env files
+**/secret.sh
+**/secret-env.sh
+
+# kube admin files
+**/admin.conf
 
 # vim swap files
 **/*.swp
@@ -15,10 +22,10 @@ macosx/install/obmcs-sdk/venv/
 # gcc artifacts
 */*.dSYM
 
-# no python virtualenv environments
+# python virtualenv environments
 **/venv
 
-# no node suports file
+# node suports file
 **/node_modules/
 npm-debug.log
 
@@ -26,14 +33,14 @@ npm-debug.log
 _build
 deps
 
-# no packer_caches or ouputs
+# packer_caches or ouputs
 **/packer_cahe
 **/output-virtualbox-iso/
 
-# no iso files
+# iso files
 **/*.iso
 
-# no virtual box artifacts
+# virtual box artifacts
 **/*.box
 **/*.vmdk
 **/*.ovf
