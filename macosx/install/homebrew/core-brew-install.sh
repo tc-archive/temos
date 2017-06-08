@@ -11,6 +11,7 @@ brew install xz
 # --- development ---
 brew install autoconf
 brew install automake
+brew install bash-completion
 brew install bison
 brew install cmake
 brew install curl
@@ -23,7 +24,7 @@ brew install mercurial
 brew install tmux
 brew install selenium-server-standalone geckodriver chromedriver
 # brew install svn
-brw install macvim
+brew install macvim
 brew install netcat netcat6
 brew install nmap
 brew install valgrind
