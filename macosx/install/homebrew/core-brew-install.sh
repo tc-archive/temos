@@ -16,10 +16,12 @@ brew install bison
 brew install cmake
 brew install curl
 brew install emacs
+brew cask install eclipse-jee
 brew install git
 brew install gdb
 brew install gnu-tar
 brew install jq
+brew cask install lighttable
 brew install tmux
 brew install selenium-server-standalone geckodriver chromedriver
 # brew install svn
@@ -35,7 +37,7 @@ brew install wireshark
 # --- languages ---
 brew install elixir
 brew install erlang rebar
-brew install go
+brew install go go-delve/delve/delve
 brew install gcc gcc@4.6 gcc@4.9
 brew install leiningen
 brew install mono
@@ -73,3 +75,6 @@ brew install kubectl
 
 # --- utils ---
 brew install imagemagick
+
+# --- applications ---
+brew cask install Caskroom/cask/anki
