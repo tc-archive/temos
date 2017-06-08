@@ -8,7 +8,7 @@ defmodule ElixirScraper do
   @site_url           "https://elixirsips.dpdcart.com"
   @login_url_fragment "/subscriber/login"
   
-  @browser_downloads  "/Users/Temple/TemOS/Downloads"
+  @browser_downloads  "/Users/Temple/Downloads"
 
   @doc """
   Logs into the main web and navigates to the list of available lessons. The page in returned.
@@ -70,6 +70,30 @@ defmodule ElixirScraper do
 	end)
   end
  
+  def watch do
+    :fs.start_link(:fs_watcher, Path.absname(@browser_downloads))
+    :fs.subscribe(:fs_watcher)
+    receive do
+      {_watcher_process, {:fs, :file_event}, {changedFile, _type}} ->
+           IO.puts("#{changedFile} was updated")
+	  _ -> IO.puts "Unknown Message!"
+    end
+  end
+
+
+  def loop do
+    receive do
+      # {sender_pid, location} -> send(sender_pid, {:ok, temperature_of(location)})
+      {:ok, message}         -> IO.puts "#{message}"
+	  _                      -> IO.puts "don't know how to process this message"
+	end
+	loop()
+  end
+
+  def wait_for_downlaods do
+  
+  end
+
 
   @doc """
   Logs into the elixir sip web site and downloads the video lessons.
@@ -89,6 +113,12 @@ defmodule ElixirScraper do
 	lesson_infos = extract_lesson_infos(lessons)
     for lesson_info <- Enum.reverse(lesson_infos) do 
       Logger.debug "lesson_info: #{Poison.encode!(lesson_info)}\n"
+	  file_links = lesson_info[:file_links]
+	  for file_link <- file_links do
+        IO.puts "file_link: #{file_link}"
+        navigate_to file_link
+		wait_for_downloads
+	  end
     end
     # end the scraping sessions
     # Hound.end_session

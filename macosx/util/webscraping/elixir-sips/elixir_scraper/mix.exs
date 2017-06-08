@@ -30,7 +30,7 @@ defmodule ElixirScraper.Mixfile do
   defp deps do
     [
 	  {:floki, "~> 0.15.0"},
-      {:fs, github: "synrc/fs"},
+      {:fs, "~> 2.12"},
       {:hound, "~> 1.0.3"},
       #{:httpoison, "~> 0.11.1"},
       {:poison, "~> 3.1.0"}
