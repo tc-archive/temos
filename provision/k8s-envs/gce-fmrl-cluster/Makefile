@@ -8,7 +8,7 @@ cluster_name=trjl-gce-k8s-cluster
 machine_type=f1-micro
 num_nodes=3
 
-gce-k8s-create:
+create-cluster:
 	# https://cloud.google.com/sdk/gcloud/reference/auth/login
 	gcloud auth login ${account}
 	# https://cloud.google.com/sdk/gcloud/reference/container/clusters/create
@@ -16,29 +16,32 @@ gce-k8s-create:
 	# https://cloud.google.com/sdk/gcloud/reference/container/clusters/get-credentials
 	gcloud container clusters get-credentials ${cluster_name}
 
-gce-k8s-destroy:
+destroy-cluster:
 	# https://cloud.google.com/sdk/gcloud/reference/auth/login
 	gcloud auth login ${account}
 	# https://cloud.google.com/sdk/gcloud/reference/container/clusters/create
 	gcloud container clusters delete ${cluster_name} --async
 
-gce-k8s-describe:
+describe-cluster:
 	# https://cloud.google.com/sdk/gcloud/reference/container/clusters/describe
 	gcloud container clusters describe trjl-gce-k8s-cluster
 
-gce-k8s-configure-kubectl:
+configure-kubectl:
 	# https://cloud.google.com/sdk/gcloud/reference/container/clusters/get-credentials
-	gcloud container clusters get-credentials ${cluster-name} --project ${project} --zone ${zone}
+	gcloud container clusters get-credentials ${cluster_name} --project ${project} --zone ${zone}
 
-gce-k8s-proxy:
+use-cluster:
+	kubectl config use-context gke_trjl-158912_europe-west1-c_trjl-gce-k8s-cluster
+
+start-proxy:
 	kubectl proxy
 
-gce-k8s-get-nodes:
+get-nodes:
 	kubectl get nodes -o wide
 
-gce-k8s-ssh-ip:
+ssh-node:
 	ssh -i ${ssh-key} ${user_name}@${ip_address}
 
-gce-k8s-ssh-instance_name:
+ssh-instance:
 	gcloud compute ssh ${instance_name}
 
