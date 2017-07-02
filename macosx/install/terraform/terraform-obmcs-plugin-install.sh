@@ -4,7 +4,8 @@
 # [download] https://github.com/oracle/terraform-provider-baremetal/releases
 
 MODULE="obmcs-terraform-plugin"
-VERSION="v1.0.3"
+#VERSION="v1.0.3"
+VERSION="v1.0.13"
 NAME="terraform-provider-baremetal"
 PACKAGE="tar.gz"
 BASE_URL="https://github.com/oracle/terraform-provider-baremetal/releases/download"

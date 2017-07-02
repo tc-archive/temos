@@ -33,15 +33,15 @@ configure-kubectl:
 use-cluster:
 	kubectl config use-context gke_trjl-158912_europe-west1-c_trjl-gce-k8s-cluster
 
-start-proxy:
+proxy-cluster:
 	kubectl proxy
 
-get-nodes:
-	kubectl get nodes -o wide
-
-ssh-node:
-	ssh -i ${ssh-key} ${user_name}@${ip_address}
-
-ssh-instance:
-	gcloud compute ssh ${instance_name}
+# get-nodes:
+# 	kubectl get nodes -o wide
+# 
+# ssh-node:
+# 	ssh -i ${ssh-key} ${user_name}@${ip_address}
+# 
+# ssh-instance:
+# 	gcloud compute ssh ${instance_name}
 

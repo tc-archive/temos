@@ -44,3 +44,6 @@ deps
 **/*.box
 **/*.vmdk
 **/*.ovf
+
+# mac junk
+**/.DS_Store
