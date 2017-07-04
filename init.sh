@@ -40,14 +40,17 @@ function fn_delete() {
     local _fn_name=$1
     if [[ ! -z ${_fn_name} ]]; then
         echo "unsetting function: ${_fn_name}"
-        export unset -v ${_fn_name}
+        unset -f ${_fn_name}
     fi
 }
 
 function module_function_delete() {
     local _name=$1
-    module_function_list ${_name} | fn_delete
-
+    echo "disable module functions"
+    for fn_name in $(module_function_list $_name)
+    do
+        fn_delete ${fn_name}
+    done
 }
 
 function module_alias_list() {
