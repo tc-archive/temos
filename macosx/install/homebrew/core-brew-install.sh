@@ -14,6 +14,7 @@ brew install automake
 brew install bash-completion
 brew install bison
 brew install cmake
+brew install coreutils
 brew install curl
 brew install emacs
 brew cask install eclipse-jee
@@ -31,6 +32,7 @@ brew install netcat netcat6
 brew install nmap
 brew install splint 
 brew install valgrind
+brew install vim --with-python3
 brew install wget
 brew install wireshark
 
